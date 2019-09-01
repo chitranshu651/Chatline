@@ -2,13 +2,18 @@ package Login_Signup;
 
 import Misc.ConnectionClass;
 import Misc.PasswordUtils;
+import Misc.SceneChange;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import sample.Main;
 
+import java.io.IOException;
+import java.security.spec.InvalidKeySpecException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -39,8 +44,12 @@ public class Signup {
     @FXML
     private Label status;
 
+    @FXML
+    private Label status2;
+
     private ConnectionClass database = new ConnectionClass();
     private Connection connection = database.getconnection();
+    private SceneChange changer = new SceneChange();
 
 
     @FXML
@@ -94,23 +103,50 @@ public class Signup {
         });
     }
 
+    @FXML
+    private void checkpasses(){
+        if(confirm.getText().equals(pass.getText())){
+            status2.setText("Match");
+        }
+        else{
+            status2.setText("NO Match");
+        }
+    }
+
 
     @FXML
-    private void signup(ActionEvent click) {
+    private void signup(ActionEvent click) throws InvalidKeySpecException, IOException {
         if (confirm.getText().equals(pass.getText()) && checkuser()) {
-            try {
                 PasswordUtils passgen = new PasswordUtils();
                 String salt = passgen.getSalt(30);
                 String hashed = passgen.generateSecurePassword(pass.getText(), salt);
                 register = new User(first.getText(), last.getText(), email.getText(), user.getText(),hashed ,salt,"Available" );
-                String sql= "INSERT INTO user values(\"" + register.getFirst() + "\", \""+ register.getLast() + "\", \""+ register.getEmail() + "\", \"" + register.getUsername() + "\", \"" + register.getPassword() + "\", \"" + register.getSalt() + "\", \""+ register.getStatus() + "\");";
-                Statement statement = connection.createStatement();
-                statement.execute(sql);
-                System.out.println("Done");
+                Main.user.sendString("Signup");
+                Main.user.sendObject(register);
+                boolean check = Main.user.recieveBoolean();
+                if(check){
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Success");
+                    alert.setHeaderText("Success");
+                    alert.setContentText("You have been registered");
+                    alert.showAndWait();
+                    changer.changeScence("../Login_Signup/Login.fxml", click, "Login");
+                }
+                else{
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Failure");
+                    alert.setHeaderText("Failure");
+                    alert.setContentText("Registration Failed");
+                    alert.showAndWait();
+                }
+
             }
-            catch(Exception e){
-                System.out.println(e);
-            }
+            else{
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Password Mismatch");
+            alert.setHeaderText("Error:");
+            alert.setContentText("Passwords Do not match");
+            alert.showAndWait();
         }
     }
 

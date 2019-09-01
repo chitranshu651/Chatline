@@ -1,6 +1,8 @@
 package Login_Signup;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
     private String First;
     private String Last;
     private String Email;

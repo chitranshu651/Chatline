@@ -11,7 +11,6 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane fx:id="anchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="600.0" stylesheets="@../Assets/anchor.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Login_Signup.Signup">
    <children>
       <VBox layoutX="72.0" layoutY="145.0" prefHeight="424.0" prefWidth="439.0" spacing="50.0">
@@ -20,8 +19,8 @@
             <JFXTextField fx:id="last" labelFloat="true" prefHeight="49.0" prefWidth="386.0" promptText="Last Name" />
             <JFXTextField fx:id="email" labelFloat="true" prefHeight="49.0" prefWidth="386.0" promptText="Email" />
             <JFXTextField fx:id="user" labelFloat="true" onKeyReleased="#labelupdate" prefHeight="49.0" prefWidth="386.0" promptText="Username" />
-            <JFXPasswordField fx:id="pass" labelFloat="true" promptText="Password" />
-            <JFXPasswordField fx:id="confirm" labelFloat="true" promptText="Confirm Password" />
+            <JFXPasswordField fx:id="pass" labelFloat="true" onKeyReleased="#checkpasses" promptText="Password" />
+            <JFXPasswordField fx:id="confirm" labelFloat="true" onKeyReleased="#checkpasses" promptText="Confirm Password" />
          </children>
          <padding>
             <Insets top="25.0" />
@@ -43,5 +42,6 @@
          </ripplerFill>
       </JFXButton>
       <Label fx:id="status" disable="true" layoutX="526.0" layoutY="422.0" prefHeight="21.0" prefWidth="50.0" />
+      <Label fx:id="status2" disable="true" layoutX="534.0" layoutY="585.0" prefHeight="21.0" prefWidth="50.0" />
    </children>
 </AnchorPane>

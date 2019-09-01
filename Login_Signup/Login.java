@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import sample.Main;
 
 public class Login {
 
@@ -31,6 +32,17 @@ public class Login {
     }
     @FXML
     private void Login(ActionEvent click){
-        
+        String username = user.getText();
+        String password = pass.getText();
+        Main.user.sendString("Login");
+        Main.user.sendString(username);
+        Main.user.sendString(password);
+        boolean login = Main.user.recieveBoolean();
+        if(login){
+            System.out.println("Login Successful");
+        }
+        else{
+            System.out.println("Unsuccessful");
+        }
     }
 }
