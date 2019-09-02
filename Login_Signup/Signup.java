@@ -1,6 +1,7 @@
 package Login_Signup;
 
 import Misc.ConnectionClass;
+import Misc.Iclose;
 import Misc.PasswordUtils;
 import Misc.SceneChange;
 import com.jfoenix.controls.JFXPasswordField;
@@ -8,8 +9,11 @@ import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 import sample.Main;
 
 import java.io.IOException;
@@ -19,7 +23,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class Signup {
+public class Signup implements Iclose {
 
     private User register;
 
@@ -130,7 +134,7 @@ public class Signup {
                     alert.setHeaderText("Success");
                     alert.setContentText("You have been registered");
                     alert.showAndWait();
-                    changer.changeScence("../Login_Signup/Login.fxml", click, "Login");
+                    changer.changeScene("../Login_Signup/Login.fxml", click, "Login");
                 }
                 else{
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -156,16 +160,28 @@ public class Signup {
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(sql);
             while (rs.next()) {
-                if (rs.getInt(1) == 0) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return rs.getInt(1) == 0;
             }
         }
         catch (SQLException e) {
             System.out.println(e);
         }
         return false;
+    }
+
+
+    @FXML
+    private void login(MouseEvent click){
+        changer.changeScene("../Login_Signup/Login.fxml",click,"Welcome To Chatline");
+    }
+
+    public void close(MouseEvent click){
+        Stage window = (Stage) ((Node) click.getSource()).getScene().getWindow();
+        window.close();
+    }
+
+    public void minimize(MouseEvent click){
+        Stage window = (Stage) ((Node) click.getSource()).getScene().getWindow();
+        window.toBack();
     }
 }

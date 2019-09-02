@@ -7,11 +7,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.paint.LinearGradient?>
 <?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="438.0" prefWidth="318.0" stylesheets="@../Assets/anchor.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Login_Signup.Login">
+<AnchorPane fx:id="anchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="614.0" prefWidth="889.0" style="-fx-background-color: #2A363F;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Login_Signup.Login">
     <children>
-        <JFXButton layoutX="96.0" layoutY="297.0" onAction="#Login" prefHeight="56.0" prefWidth="109.0" style="-fx-background-color: #1bf2b9;" text="Login">
+        <JFXButton layoutX="589.0" layoutY="381.0" onAction="#Login" prefHeight="50.0" prefWidth="100.0" style="-fx-background-color: #1bf2b9;" text="Login">
             <ripplerFill>
                 <LinearGradient endX="1.0" endY="1.0" startX="0.5776699029126213" startY="0.3592233009708738">
                     <stops>
@@ -21,12 +24,22 @@
                 </LinearGradient>
             </ripplerFill>
         </JFXButton>
-      <JFXTextField fx:id="user" labelFloat="true" layoutX="50.0" layoutY="105.0" prefHeight="46.0" prefWidth="202.0" promptText="Username" />
-      <JFXPasswordField fx:id="pass" layoutX="51.0" layoutY="200.0" prefHeight="37.0" prefWidth="202.0" promptText="Password" />
-      <Label layoutX="114.0" layoutY="29.0" text="Login">
+      <JFXTextField fx:id="user" focusColor="WHITE" labelFloat="true" layoutX="537.0" layoutY="231.0" prefHeight="30.0" prefWidth="200.0" promptText="Username" style="-fx-background-color: white;" unFocusColor="#0a0a0a" />
+      <JFXPasswordField fx:id="pass" focusColor="WHITE" labelFloat="true" layoutX="537.0" layoutY="307.0" prefHeight="30.0" prefWidth="200.0" promptText="Password" style="-fx-background-color: white;" />
+      <Label layoutX="592.0" layoutY="144.0" text="Login" textFill="#fffefe">
          <font>
             <Font name="Felix Titling" size="29.0" />
          </font>
       </Label>
+      <Line endX="67.0" endY="283.0" layoutX="377.0" layoutY="175.0" startX="67.0" startY="-89.0" stroke="WHITE" />
+      <Label layoutX="552.0" layoutY="449.0" onMouseClicked="#Signup" prefHeight="21.0" prefWidth="171.0" text="Not Registered? Signup" textFill="WHITE" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1bf2b9" height="62.0" layoutX="124.0" layoutY="264.0" stroke="BLACK" strokeType="INSIDE" width="11.0" />
+      <Label layoutX="142.0" layoutY="259.0" prefHeight="62.0" prefWidth="184.0" text="ChatLine" textFill="WHITE">
+         <font>
+            <Font name="Monotype Corsiva" size="55.0" />
+         </font>
+      </Label>
+      <Circle fill="#ee0000" layoutX="866.0" layoutY="23.0" onMouseClicked="#close" radius="9.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fill="#d7eb00" layoutX="840.0" layoutY="23.0" onMouseClicked="#minimize" radius="9.0" stroke="BLACK" strokeType="INSIDE" />
     </children>
 </AnchorPane>

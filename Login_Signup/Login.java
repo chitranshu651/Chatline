@@ -1,13 +1,18 @@
 package Login_Signup;
 
+import Misc.Iclose;
+import Misc.SceneChange;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 import sample.Main;
 
-public class Login {
+public class Login implements Iclose {
 
     @FXML
     private JFXTextField user;
@@ -30,6 +35,8 @@ public class Login {
                 user.validate();
         });
     }
+
+    SceneChange changer =new SceneChange();
     @FXML
     private void Login(ActionEvent click){
         String username = user.getText();
@@ -44,5 +51,19 @@ public class Login {
         else{
             System.out.println("Unsuccessful");
         }
+    }
+    @FXML
+    private void Signup(MouseEvent click){
+        changer.changeScene("../Login_Signup/Signup.fxml", click, "Signup");
+    }
+
+    public void close(MouseEvent click){
+        Stage window = (Stage) ((Node) click.getSource()).getScene().getWindow();
+        window.close();
+    }
+
+    public void minimize(MouseEvent click){
+        Stage window = (Stage) ((Node) click.getSource()).getScene().getWindow();
+        window.toBack();
     }
 }
