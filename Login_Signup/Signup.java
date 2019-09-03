@@ -124,7 +124,7 @@ public class Signup implements Iclose {
                 PasswordUtils passgen = new PasswordUtils();
                 String salt = passgen.getSalt(30);
                 String hashed = passgen.generateSecurePassword(pass.getText(), salt);
-                register = new User(first.getText(), last.getText(), email.getText(), user.getText(),hashed ,salt,"Available" );
+                register = new User(" ",first.getText(), last.getText(), email.getText(), user.getText(),hashed ,salt,"Available" );
                 Main.user.sendString("Signup");
                 Main.user.sendObject(register);
                 boolean check = Main.user.recieveBoolean();

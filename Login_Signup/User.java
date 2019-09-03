@@ -10,8 +10,9 @@ public class User implements Serializable {
     private String Password;
     private String salt;
     private String Status;
+    private String avatar;
 
-    public User(String first, String last, String email, String username, String password, String salt, String status) {
+    public User(String avatar,String first, String last, String email, String username, String password, String salt, String status) {
         First = first;
         Last = last;
         Email = email;
@@ -19,6 +20,7 @@ public class User implements Serializable {
         Password = password;
         this.salt = salt;
         Status = status;
+        this.avatar = avatar;
     }
 
     public String getFirst() {

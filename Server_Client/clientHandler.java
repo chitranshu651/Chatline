@@ -98,7 +98,7 @@ public class clientHandler implements Runnable {
     private boolean SignUp() {
         try {
             User register = (User) ObjectInput.readObject();
-            String sql = "INSERT INTO user values(\"" + register.getFirst() + "\", \"" + register.getLast() + "\", \"" + register.getEmail() + "\", \"" + register.getUsername() + "\", \"" + register.getPassword() + "\", \"" + register.getSalt() + "\", \"" + register.getStatus() + "\");";
+            String sql = "INSERT INTO user values(\"" + register.getFirst() + "\", \"" + register.getLast() + "\", \"" + register.getEmail() + "\", \"" + register.getUsername() + "\", \"" + register.getPassword() + "\", \"" + register.getSalt() + "\", \"" + register.getStatus() + "\", \" " + " " + "\");";
             Statement statement = connection.createStatement();
             statement.execute(sql);
             return true;

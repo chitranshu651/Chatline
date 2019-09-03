@@ -2,6 +2,7 @@ package Login_Signup;
 
 import Misc.Iclose;
 import Misc.SceneChange;
+import Misc.SessionInfo;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
@@ -47,6 +48,8 @@ public class Login implements Iclose {
         boolean login = Main.user.recieveBoolean();
         if(login){
             System.out.println("Login Successful");
+            SessionInfo.setUsername(username);
+            changer.changeScene("../App/Anchor.fxml", click, "Hi");
         }
         else{
             System.out.println("Unsuccessful");
