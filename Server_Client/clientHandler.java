@@ -77,10 +77,11 @@ public class clientHandler implements Runnable {
     }
 
     private ArrayList<User> Search() {
+        ArrayList<User> names=new ArrayList<User>();
         try {
             String user=dataInput.readUTF();
             String sql="SELECT `Avatar`,`First`,`Last`,`Username`,`Email`,`Status` FROM `user` WHERE `Username` LIKE \'"+ user + "%\';";
-            ArrayList<User> names=new ArrayList<User>();
+
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(sql);
             while(rs.next())
@@ -91,13 +92,13 @@ public class clientHandler implements Runnable {
                 String email=rs.getString(3);
                 String username=rs.getString(4);
                 String status=rs.getString(5);
-                User user=new User(avatar,first,last,email,username,"","",status);  //error due to avatar
-                names.add(user);
+                User user1=new User(avatar,first,last,email,username,"","",status);
+                names.add(user1);
             }
-            return names;
         } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
+        return names;
 
     }
 
