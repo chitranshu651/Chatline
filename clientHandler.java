@@ -13,6 +13,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import static java.lang.System.exit;
+
 public class clientHandler implements Runnable {
 
     private Socket client;
@@ -57,7 +59,6 @@ public class clientHandler implements Runnable {
                         ObjectOutput.writeObject(Search());
                         break;
 
-
                 }
             } catch (Exception e) {
                 System.out.println(e);
@@ -101,6 +102,7 @@ public class clientHandler implements Runnable {
 
     }
 
+
     private boolean Login() {
         try {
             String username = dataInput.readUTF();
@@ -115,7 +117,9 @@ public class clientHandler implements Runnable {
                 Spassword = rs.getString("Password");
                 Salt = rs.getString("Salt");
             }
-            return check.verifyUserPassword(password, Spassword, Salt);
+            if (check.verifyUserPassword(password, Spassword, Salt)) {
+                return true;
+            } else return false;
         } catch (IOException | SQLException | InvalidKeySpecException | IllegalArgumentException e) {
             System.out.println(e);
         }
@@ -125,12 +129,12 @@ public class clientHandler implements Runnable {
 
     private boolean SignUp() {
         try {
-            User register = (User) ObjectInput.readObject();
-            String sql = "INSERT INTO user values(\"" + register.getFirst() + "\", \"" + register.getLast() + "\", \"" + register.getEmail() + "\", \"" + register.getUsername() + "\", \"" + register.getPassword() + "\", \"" + register.getSalt() + "\", \"" + register.getStatus() + "\", \" " + " " + "\");";
+            User register =(User) ObjectInput.readObject();
+            String sql= "INSERT INTO user values(\"" + register.getFirst() + "\", \""+ register.getLast() + "\", \""+ register.getEmail() + "\", \"" + register.getUsername() + "\", \"" + register.getPassword() + "\", \"" + register.getSalt() + "\", \""+ register.getStatus() + "\");";
             Statement statement = connection.createStatement();
             statement.execute(sql);
             return true;
-        } catch (IOException | SQLException | ClassNotFoundException e) {
+        } catch (IOException | SQLException| ClassNotFoundException e) {
             System.out.println(e);
         }
         return false;
