@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import static java.lang.System.exit;
 
@@ -54,6 +55,9 @@ public class clientHandler implements Runnable {
                     case "Signup":
                         dataOutput.writeBoolean(SignUp());
                         break;
+                    case "Search":
+                        ObjectOutput.writeObject(Search());
+                        break;
 
                 }
             } catch (Exception e) {
@@ -73,6 +77,30 @@ public class clientHandler implements Runnable {
         }
     }
 
+    private ArrayList<User> Search() {
+        try {
+            String user=dataInput.readUTF();
+            String sql="SELECT `Avatar`,`First`,`Last`,`Username`,`Email`,`Status` FROM `user` WHERE `Username` LIKE \'"+ user + "%\';";
+            ArrayList<User> names=new ArrayList<User>();
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(sql);
+            while(rs.next())
+            {
+                String avatar=rs.getString(0);
+                String first=rs.getString(1);
+                String last=rs.getString(2);
+                String email=rs.getString(3);
+                String username=rs.getString(4);
+                String status=rs.getString(5);
+                User user=new User(avatar,first,last,email,username,"","",status);  //error due to avatar
+                names.add(user);
+            }
+            return names;
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
 
 
     private boolean Login() {
