@@ -43,7 +43,7 @@
             </LinearGradient>
          </ripplerFill>
       </JFXButton>
-      <Label fx:id="status" disable="true" layoutX="526.0" layoutY="422.0" prefHeight="21.0" prefWidth="50.0" />
+      <Label fx:id="status" disable="true" layoutX="526.0" layoutY="422.0" prefHeight="21.0" prefWidth="50.0" textFill="#f2f0f0" />
       <Label fx:id="status2" disable="true" layoutX="534.0" layoutY="585.0" prefHeight="21.0" prefWidth="50.0" />
       <HBox alignment="TOP_RIGHT" layoutX="462.0" layoutY="14.0" prefHeight="35.0" prefWidth="128.0" spacing="20.0">
          <children>

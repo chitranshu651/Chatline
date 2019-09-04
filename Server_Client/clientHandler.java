@@ -3,6 +3,8 @@ package Server_Client;
 import Login_Signup.User;
 import Misc.ConnectionClass;
 import Misc.PasswordUtils;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.io.*;
 import java.net.Socket;
@@ -56,6 +58,10 @@ public class clientHandler implements Runnable {
                     case "Search":
                         ObjectOutput.writeObject(Search());
                         break;
+                    case "GetProfile":
+                        ObjectOutput.writeObject(GetProfile());
+                    case "GetFriends":
+                        ObjectOutput.writeObject(GetFriends());
 
 
                 }
@@ -76,6 +82,59 @@ public class clientHandler implements Runnable {
         }
     }
 
+    private ArrayList<User> GetFriends() {
+        ArrayList<User> friends= new ArrayList<User>();
+        try {
+            String user = dataInput.readUTF();
+            String sql = "SELECT * from friend join user on user2=Username where `user1`=\"" + user + "\";";
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(sql);
+            while(rs.next()) {
+                String avatar = rs.getString("Avatar");
+                String first = rs.getString("First");
+                String last = rs.getString("Last");
+                String email = rs.getString("Email");
+                String username = rs.getString("Username");
+                String status = rs.getString("Status");
+                User user1 = new User(avatar, first, last, email, username, "", "", status);
+                friends.add(user1);
+                user1=null;
+            }
+        }
+        catch(IOException  | SQLException e){
+            System.out.println(e);
+        }
+        return friends;
+    }
+
+
+    private User GetProfile() {
+
+        try {
+            String user = dataInput.readUTF();
+            String sql = "SELECT * from user where `Username`=\"" + user + "\";";
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(sql);
+            while(rs.next()) {
+                String avatar = rs.getString("Avatar");
+                String first = rs.getString("First");
+                String last = rs.getString("Last");
+                String email = rs.getString("Email");
+                String username = rs.getString("Username");
+                String status = rs.getString("Status");
+                User user1 = new User(avatar, first, last, email, username, "", "", status);
+
+                return user1;
+            }
+            }
+        catch(IOException  | SQLException e){
+            System.out.println(e);
+        }
+
+        return null;
+    }
+
+
     private ArrayList<User> Search() {
         ArrayList<User> names=new ArrayList<User>();
         try {
@@ -86,12 +145,12 @@ public class clientHandler implements Runnable {
             ResultSet rs = statement.executeQuery(sql);
             while(rs.next())
             {
-                String avatar=rs.getString(0);
-                String first=rs.getString(1);
-                String last=rs.getString(2);
-                String email=rs.getString(3);
-                String username=rs.getString(4);
-                String status=rs.getString(5);
+                String avatar=rs.getString("Avatar");
+                String first=rs.getString("First");
+                String last=rs.getString("Last");
+                String email=rs.getString("Email");
+                String username=rs.getString("Username");
+                String status=rs.getString("Status");
                 User user1=new User(avatar,first,last,email,username,"","",status);
                 names.add(user1);
             }
