@@ -3,9 +3,6 @@ package Server_Client;
 import Login_Signup.User;
 import Misc.ConnectionClass;
 import Misc.PasswordUtils;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
 import java.io.*;
 import java.net.Socket;
 import java.security.spec.InvalidKeySpecException;
@@ -64,8 +61,16 @@ public class clientHandler implements Runnable {
                     case "GetFriends":
                         ObjectOutput.writeObject(GetFriends());
                         break;
-
-
+                    case "FriendReq":
+                        dataOutput.writeBoolean(FriendReq());
+                        break;
+                    case "ReqAccept":
+                        dataOutput.writeBoolean(ReqAccept());
+                        break;
+                    case "UpdateProfile":
+                        dataOutput.writeBoolean(updateProfile());
+                        break;
+                        
                 }
             } catch (Exception e) {
                 System.out.println(e);
@@ -83,6 +88,42 @@ public class clientHandler implements Runnable {
             System.out.println(e);
         }
     }
+
+    private boolean updateProfile() {
+        return true;
+    }
+
+    private boolean ReqAccept() {
+        try {
+            String user1 = dataInput.readUTF();
+            String user2 = dataInput.readUTF();
+            String sql = "INSERT into friend VALUES(NULL,\"" + user1 + "\",\"" + user2 + "\");";
+            String sql1 = "INSERT into friend VALUES(NULL,\"" + user2 + "\",\"" + user1 + "\");";
+            String sql2 = "DELETE from Request where firstuser=\"" + user1 + "\" && seconduser=\"" + user2 + "\";";
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            ResultSet rs1 = stmt.executeQuery(sql1);
+            return true;
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private boolean FriendReq() {
+        try {
+            String user1 = dataInput.readUTF();
+            String user2 = dataInput.readUTF();
+            String sql = "INSERT into Request VALUES(NULL,\"" + user1 + "\",\"" + user2 + "\");";
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(sql);
+            return true;
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 
     private ArrayList<User> GetFriends() {
         ArrayList<User> friends= new ArrayList<>();
@@ -191,7 +232,7 @@ public class clientHandler implements Runnable {
     private boolean SignUp() {
         try {
             User register = (User) ObjectInput.readObject();
-            String sql = "INSERT INTO user values(\"" + register.getFirst() + "\", \"" + register.getLast() + "\", \"" + register.getEmail() + "\", \"" + register.getUsername() + "\", \"" + register.getPassword() + "\", \"" + register.getSalt() + "\", \"" + register.getStatus() + "\", \" " + " " + "\");";
+            String sql = "INSERT INTO user values(\"" + register.getFirst() + "\", \"" + register.getLast() + "\", \"" + register.getEmail() + "\", \"" + register.getUsername() + "\", \"" + register.getPassword() + "\", \"" + register.getSalt() + "\", \"" + register.getStatus() + "\", \" " + "Server_Client/Server_Files/def.jpg" + "\");";
             Statement statement = connection.createStatement();
             statement.execute(sql);
             return true;
