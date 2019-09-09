@@ -60,8 +60,10 @@ public class clientHandler implements Runnable {
                         break;
                     case "GetProfile":
                         ObjectOutput.writeObject(GetProfile());
+                        break;
                     case "GetFriends":
                         ObjectOutput.writeObject(GetFriends());
+                        break;
 
 
                 }
@@ -83,9 +85,10 @@ public class clientHandler implements Runnable {
     }
 
     private ArrayList<User> GetFriends() {
-        ArrayList<User> friends= new ArrayList<User>();
+        ArrayList<User> friends= new ArrayList<>();
         try {
             String user = dataInput.readUTF();
+            System.out.println(user);
             String sql = "SELECT * from friend join user on user2=Username where `user1`=\"" + user + "\";";
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(sql);
@@ -96,10 +99,12 @@ public class clientHandler implements Runnable {
                 String email = rs.getString("Email");
                 String username = rs.getString("Username");
                 String status = rs.getString("Status");
+                System.out.println(username);
                 User user1 = new User(avatar, first, last, email, username, "", "", status);
                 friends.add(user1);
                 user1=null;
             }
+            System.out.println("Here");
         }
         catch(IOException  | SQLException e){
             System.out.println(e);

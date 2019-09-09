@@ -52,8 +52,7 @@ public class Anchor
         Main.user.sendString("GetFriends");
         Main.user.sendString(username);
         ArrayList<User> friends=(ArrayList<User>) Main.user.recieveObject();
-        ObservableList<User> toset= FXCollections.observableArrayList(friends);
-        friend.setItems(toset);
+        friend.setItems(FXCollections.observableArrayList(friends));
 
 
     }
