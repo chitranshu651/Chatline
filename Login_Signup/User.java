@@ -1,5 +1,7 @@
 package Login_Signup;
 
+import javafx.scene.image.Image;
+
 import java.io.Serializable;
 
 public class User implements Serializable {
@@ -11,6 +13,7 @@ public class User implements Serializable {
     private String salt;
     private String Status;
     private String avatar;
+    private Image img;
 
     public User(String avatar,String first, String last, String email, String username, String password, String salt, String status) {
         First = first;
@@ -49,5 +52,21 @@ public class User implements Serializable {
 
     public String getStatus() {
         return Status;
+    }
+
+    public Image getImg() {
+        return img;
+    }
+
+    public void setImg(Image img) {
+        this.img = img;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

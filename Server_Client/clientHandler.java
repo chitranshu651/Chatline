@@ -3,6 +3,8 @@ package Server_Client;
 import Login_Signup.User;
 import Misc.ConnectionClass;
 import Misc.PasswordUtils;
+import javafx.scene.image.Image;
+
 import java.io.*;
 import java.net.Socket;
 import java.security.spec.InvalidKeySpecException;
@@ -70,7 +72,7 @@ public class clientHandler implements Runnable {
                     case "UpdateProfile":
                         dataOutput.writeBoolean(updateProfile());
                         break;
-                        
+
                 }
             } catch (Exception e) {
                 System.out.println(e);
@@ -99,7 +101,7 @@ public class clientHandler implements Runnable {
             String user2 = dataInput.readUTF();
             String sql = "INSERT into friend VALUES(NULL,\"" + user1 + "\",\"" + user2 + "\");";
             String sql1 = "INSERT into friend VALUES(NULL,\"" + user2 + "\",\"" + user1 + "\");";
-            String sql2 = "DELETE from Request where firstuser=\"" + user1 + "\" && seconduser=\"" + user2 + "\";";
+            String sql2 = "DELETE from request where firstuser=\"" + user1 + "\" and seconduser=\"" + user2 + "\";";
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             ResultSet rs1 = stmt.executeQuery(sql1);
@@ -114,7 +116,7 @@ public class clientHandler implements Runnable {
         try {
             String user1 = dataInput.readUTF();
             String user2 = dataInput.readUTF();
-            String sql = "INSERT into Request VALUES(NULL,\"" + user1 + "\",\"" + user2 + "\");";
+            String sql = "INSERT into request VALUES(NULL,\"" + user1 + "\",\"" + user2 + "\");";
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(sql);
             return true;
@@ -148,7 +150,7 @@ public class clientHandler implements Runnable {
             System.out.println("Here");
         }
         catch(IOException  | SQLException e){
-            System.out.println(e);
+            e.printStackTrace();
         }
         return friends;
     }

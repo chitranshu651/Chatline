@@ -1,6 +1,7 @@
 package App;
 
 import Login_Signup.User;
+import Misc.Iclose;
 import Misc.SceneChange;
 import Misc.SessionInfo;
 import com.jfoenix.controls.JFXListView;
@@ -8,19 +9,25 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import sample.Main;
 
 import java.util.ArrayList;
 
-public class Anchor
+public class Anchor implements Iclose
 {
 
     @FXML
@@ -39,7 +46,7 @@ public class Anchor
     private Label user;
 
     @FXML
-    private JFXListView friend;
+    private ListView friend;
 
     @FXML
     private Label email;
@@ -71,8 +78,22 @@ public class Anchor
         Main.user.sendString(username);
         ArrayList<User> friends=(ArrayList<User>) Main.user.recieveObject();
         friend.setItems(FXCollections.observableArrayList(friends));
-
-
+        ArrayList a = new ArrayList();
+        for(User test : friends){
+            HBox hbox = new HBox();
+            Circle cir = new Circle(30);
+            hbox.setSpacing(25);
+            cir.setFill(new ImagePattern(new Image(test.getAvatar())));
+            Label lbl = new Label(test.getUsername());
+            lbl.setFont(new Font(15));
+            Label mess = new Label("Message goes here");
+            mess.setFont(new Font(12));
+            VBox vbox = new VBox();
+            vbox.getChildren().addAll(lbl,mess);
+            hbox.getChildren().addAll(cir,vbox);
+            a.add(hbox);
+        }
+        friend.setItems(FXCollections.observableArrayList(a));
     }
 
 

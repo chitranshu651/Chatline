@@ -19,9 +19,9 @@
             <Circle fill="#ee0000" onMouseClicked="#close" radius="9.0" stroke="BLACK" strokeType="INSIDE" />
          </children>
       </HBox>
-      <AnchorPane layoutY="111.0" prefHeight="535.0" prefWidth="323.0" style="-fx-background-color: #4c6185;">
+      <AnchorPane layoutY="111.0" prefHeight="556.0" prefWidth="337.0" style="-fx-background-color: #4c6185;">
          <children>
-            <JFXListView fx:id="friend" layoutX="14.0" layoutY="-7.0" prefHeight="535.0" prefWidth="323.0" style="-fx-background-color: #4c6185;" />
+            <JFXListView fx:id="friend" layoutX="14.0" layoutY="-7.0" prefHeight="556.0" prefWidth="337.0" style="-fx-background-color: #4c6185;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
          </children>
       </AnchorPane>
       <AnchorPane layoutX="337.0" layoutY="60.0" prefHeight="606.0" prefWidth="721.0" style="-fx-background-color: #FFFFFF;">
@@ -57,7 +57,7 @@
             </JFXButton>
          </children>
       </AnchorPane>
-      <AnchorPane prefHeight="113.0" prefWidth="323.0" style="-fx-background-color: #768087;">
+      <AnchorPane layoutY="1.0" prefHeight="119.0" prefWidth="337.0" style="-fx-background-color: #768087;">
          <children>
             <Label layoutX="31.0" layoutY="85.0" prefHeight="21.0" prefWidth="89.0" text="Friends" textFill="#fff8f8">
                <font>

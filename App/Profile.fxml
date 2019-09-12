@@ -27,7 +27,7 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <JFXButton fx:id="insert" style="-fx-background-color: #00f5a7;" text="Insert" />
+                  <JFXButton fx:id="input" style="-fx-background-color: #00f5a7;" text="Insert" />
                   <Label fx:id="filename" textFill="#f5f5f5" />
                </children>
             </HBox>
@@ -55,10 +55,10 @@
       <JFXButton layoutX="234.0" layoutY="707.0" onAction="#back" prefHeight="35.0" prefWidth="96.0" style="-fx-background-color: #00f5a7;" text="Back" />
       <VBox alignment="TOP_CENTER" layoutX="508.0" layoutY="162.0" prefHeight="390.0" prefWidth="50.0" spacing="50.0">
          <children>
-            <JFXToggleButton fx:id="tfirst" prefHeight="50.0" prefWidth="89.0" />
-            <JFXToggleButton fx:id="tlast" prefHeight="50.0" prefWidth="89.0" />
-            <JFXToggleButton fx:id="temail" prefHeight="50.0" prefWidth="89.0" />
-            <JFXToggleButton fx:id="tavatar" prefHeight="50.0" prefWidth="89.0" />
+            <JFXToggleButton fx:id="tfirst" onAction="#efname" prefHeight="50.0" prefWidth="89.0" />
+            <JFXToggleButton fx:id="tlast" onAction="#elname" prefHeight="50.0" prefWidth="89.0" />
+            <JFXToggleButton fx:id="temail" onAction="#eemail" prefHeight="50.0" prefWidth="89.0" />
+            <JFXToggleButton fx:id="tavatar" onAction="#eavatar" prefHeight="50.0" prefWidth="89.0" />
          </children>
       </VBox>
       <HBox alignment="TOP_RIGHT" layoutX="462.0" layoutY="14.0" prefHeight="35.0" prefWidth="128.0" spacing="20.0">
