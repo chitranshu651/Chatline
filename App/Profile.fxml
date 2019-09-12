@@ -27,7 +27,7 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <JFXButton fx:id="input" style="-fx-background-color: #00f5a7;" text="Insert" />
+                  <JFXButton fx:id="input" onAction="#insert" style="-fx-background-color: #00f5a7;" text="Insert" />
                   <Label fx:id="filename" textFill="#f5f5f5" />
                </children>
             </HBox>

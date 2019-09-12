@@ -5,6 +5,8 @@ import Misc.ConnectionClass;
 import Misc.PasswordUtils;
 import javafx.scene.image.Image;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.Socket;
 import java.security.spec.InvalidKeySpecException;
@@ -12,7 +14,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.TimeZone;
 
 public class clientHandler implements Runnable {
 
@@ -37,6 +41,8 @@ public class clientHandler implements Runnable {
         this.dataOutput = dataOutput;
     }
 
+
+    private File f;
     @Override
     public void run() {
         while (true) {
@@ -59,6 +65,10 @@ public class clientHandler implements Runnable {
                         break;
                     case "GetProfile":
                         ObjectOutput.writeObject(GetProfile());
+                        int need = dataInput.readInt();
+                        if(need==1){
+                            ObjectOutput.writeObject(f);
+                        }
                         break;
                     case "GetFriends":
                         ObjectOutput.writeObject(GetFriends());
@@ -92,7 +102,32 @@ public class clientHandler implements Runnable {
     }
 
     private boolean updateProfile() {
-        return true;
+        try{
+            System.out.println(System.getProperty("user.dir"));
+            String username = dataInput.readUTF();
+            String first = dataInput.readUTF();
+            String last = dataInput.readUTF();
+            String email = dataInput.readUTF();
+            File f = (File) ObjectInput.readObject();
+            System.out.println(LocalDateTime.now().toString());
+            String filename=username+".jpg";
+            String path ="src/Server_Client/Server_Files/"+ filename;
+            File output = new File(path);
+            if(output.createNewFile()){
+                System.out.println("File Created");
+            }
+            System.out.println(output);
+            BufferedImage img = ImageIO.read(f);
+            ImageIO.write(img,"jpg",output);
+            String sql = "Update user set First=\""+ first +"\", Last=\""+ last + "\",Email=\"" + email +"\", Avatar=\""+ path+"\" where username=\"" + username+ "\";";
+            Statement statement= connection.createStatement();
+            boolean b = statement.execute(sql);
+            return true;
+        }
+        catch (IOException | ClassNotFoundException| SQLException e){
+            e.printStackTrace();
+            return false;
+        }
     }
 
     private boolean ReqAccept() {
@@ -144,6 +179,8 @@ public class clientHandler implements Runnable {
                 String status = rs.getString("Status");
                 System.out.println(username);
                 User user1 = new User(avatar, first, last, email, username, "", "", status);
+                File p = new File(avatar);
+                user1.setPic(p);
                 friends.add(user1);
                 user1=null;
             }
@@ -171,7 +208,7 @@ public class clientHandler implements Runnable {
                 String username = rs.getString("Username");
                 String status = rs.getString("Status");
                 User user1 = new User(avatar, first, last, email, username, "", "", status);
-
+                f = new File(avatar);
                 return user1;
             }
             }

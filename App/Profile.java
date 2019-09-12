@@ -10,10 +10,15 @@ import com.jfoenix.controls.JFXToggleButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import sample.Main;
+
+import java.io.File;
+import java.io.IOException;
 
 public class Profile implements Iclose {
 
@@ -43,6 +48,8 @@ public class Profile implements Iclose {
 
     @FXML
     private JFXToggleButton tavatar;
+
+    private File file;
 
     private SceneChange changer = new SceneChange();
 
@@ -100,14 +107,46 @@ public class Profile implements Iclose {
     }
 
     @FXML
+    private void insert(ActionEvent click){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("JPEG Files", "*.jpg"),new FileChooser.ExtensionFilter("PNG Files", "*.png"));
+        file = fileChooser.showOpenDialog((Stage)((Node)(click.getSource())).getScene().getWindow());
+        if(!file.exists()){
+            Alert alert = new Alert(Alert.AlertType.ERROR, "File doesn't exist");
+            alert.showAndWait();
+        }
+        else{
+            filename.setText(file.getName());
+        }
+    }
+
+    @FXML
     private void back(ActionEvent click){
         changer.changeScene("../App/Anchor.fxml", click, "Home");
     }
 
     @FXML
     private void update(ActionEvent click){
-        //UPDATE CODE
-        changer.changeScene("../App/Anchor.fxml", click, "Home");
+        Main.user.sendString("UpdateProfile");
+        Main.user.sendString(SessionInfo.getUsername());
+        Main.user.sendString(first.getText());
+        Main.user.sendString(last.getText());
+        Main.user.sendString(email.getText());
+        try {
+            Main.user.sendObject(file);
+            boolean check = Main.user.recieveBoolean();
+            if(check) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION,"Profile update successful");
+                changer.changeScene("../App/Anchor.fxml", click, "Home");
+            }
+            else {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Check your details");
+                alert.showAndWait();
+            }
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
 

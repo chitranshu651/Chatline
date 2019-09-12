@@ -2,6 +2,7 @@ package Login_Signup;
 
 import javafx.scene.image.Image;
 
+import java.io.File;
 import java.io.Serializable;
 
 public class User implements Serializable {
@@ -14,8 +15,17 @@ public class User implements Serializable {
     private String Status;
     private String avatar;
     private Image img;
+    private File pic;
 
-    public User(String avatar,String first, String last, String email, String username, String password, String salt, String status) {
+    public File getPic() {
+        return pic;
+    }
+
+    public void setPic(File pic) {
+        this.pic = pic;
+    }
+
+    public User(String avatar, String first, String last, String email, String username, String password, String salt, String status) {
         First = first;
         Last = last;
         Email = email;
@@ -69,4 +79,6 @@ public class User implements Serializable {
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
+
+
 }
