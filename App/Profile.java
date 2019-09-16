@@ -53,6 +53,7 @@ public class Profile implements Iclose {
 
     private SceneChange changer = new SceneChange();
 
+    //Functions for Toggle Button State and TextField Enabling
     @FXML
     void eavatar(ActionEvent event) {
         if(tavatar.isSelected()){
@@ -94,13 +95,16 @@ public class Profile implements Iclose {
     }
     @FXML
     private void initialize(){
+        //Initializing all Textfields as disabled
         first.setDisable(true);
         last.setDisable(true);
         email.setDisable(true);
         input.setDisable(true);
+        //Getting User Data to Update fields
         Main.user.sendString("GetProfile");
         Main.user.sendString(SessionInfo.getUsername());
         User user =(User) Main.user.recieveObject();
+        //Setting Data
         first.setText(user.getFirst());
         last.setText(user.getLast());
         email.setText(user.getEmail());
@@ -108,10 +112,14 @@ public class Profile implements Iclose {
 
     @FXML
     private void insert(ActionEvent click){
+        //Uploading New Avatar for User
         FileChooser fileChooser = new FileChooser();
+        //Set Filter
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("JPEG Files", "*.jpg"),new FileChooser.ExtensionFilter("PNG Files", "*.png"));
+        //Get file
         file = fileChooser.showOpenDialog((Stage)((Node)(click.getSource())).getScene().getWindow());
         if(!file.exists()){
+            //Check for File
             Alert alert = new Alert(Alert.AlertType.ERROR, "File doesn't exist");
             alert.showAndWait();
         }
@@ -125,21 +133,29 @@ public class Profile implements Iclose {
         changer.changeScene("../App/Anchor.fxml", click, "Home");
     }
 
+    //Update Profile Action
     @FXML
     private void update(ActionEvent click){
+        //Sending Data to be updated with User Details
         Main.user.sendString("UpdateProfile");
         Main.user.sendString(SessionInfo.getUsername());
         Main.user.sendString(first.getText());
         Main.user.sendString(last.getText());
         Main.user.sendString(email.getText());
         try {
+            System.out.println("NO error");
             Main.user.sendObject(file);
+            //Check if update successful
+
             boolean check = Main.user.recieveBoolean();
+            System.out.println("Waiting over");
             if(check) {
+                //Show success alert
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION,"Profile update successful");
                 changer.changeScene("../App/Anchor.fxml", click, "Home");
             }
             else {
+                //Show Failure Alert
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Check your details");
                 alert.showAndWait();
             }
@@ -149,6 +165,7 @@ public class Profile implements Iclose {
         }
     }
 
+    //Window Controls
 
     public void close(MouseEvent click){
         Stage window = (Stage) ((Node) click.getSource()).getScene().getWindow();

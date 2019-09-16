@@ -175,6 +175,7 @@ public class Signup implements Iclose {
         changer.changeScene("../Login_Signup/Login.fxml",click,"Welcome To Chatline");
     }
 
+    //Window Controls
     public void close(MouseEvent click){
         Stage window = (Stage) ((Node) click.getSource()).getScene().getWindow();
         window.close();

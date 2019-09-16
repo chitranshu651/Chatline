@@ -2,7 +2,9 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXSpinner?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.paint.LinearGradient?>
@@ -23,6 +25,9 @@
                     </stops>
                 </LinearGradient>
             </ripplerFill>
+         <graphic>
+            <FontAwesomeIconView glyphName="USER" size="20" />
+         </graphic>
         </JFXButton>
       <JFXTextField fx:id="user" focusColor="WHITE" labelFloat="true" layoutX="537.0" layoutY="231.0" prefHeight="30.0" prefWidth="200.0" promptText="Username" style="-fx-background-color: white;" unFocusColor="#0a0a0a" />
       <JFXPasswordField fx:id="pass" focusColor="WHITE" labelFloat="true" layoutX="537.0" layoutY="307.0" prefHeight="30.0" prefWidth="200.0" promptText="Password" style="-fx-background-color: white;" />
@@ -41,5 +46,6 @@
       </Label>
       <Circle fill="#ee0000" layoutX="866.0" layoutY="23.0" onMouseClicked="#close" radius="9.0" stroke="BLACK" strokeType="INSIDE" />
       <Circle fill="#d7eb00" layoutX="840.0" layoutY="23.0" onMouseClicked="#minimize" radius="9.0" stroke="BLACK" strokeType="INSIDE" />
+      <JFXSpinner fx:id="spinner" layoutX="444.0" layoutY="270.0" prefHeight="50.0" prefWidth="56.0" visible="false" />
     </children>
 </AnchorPane>

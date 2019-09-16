@@ -12,6 +12,8 @@ import java.io.IOException;
 
 public class SceneChange {
 
+    //Change Scene With Action Event for Buttons
+
     public void changeScene(String Filename, ActionEvent click, String Title) {
         try {
             Parent parent = FXMLLoader.load(getClass().getResource(Filename));
@@ -26,6 +28,7 @@ public class SceneChange {
         }
     }
 
+    //Changes Scene with Button Action Event with dimesions specified
     public void changeScene(String Filename, ActionEvent click, String Title, int width, int height) {
         try {
             Parent parent = FXMLLoader.load(getClass().getResource(Filename));
@@ -40,6 +43,7 @@ public class SceneChange {
         }
     }
 
+    //Changes Scene wih Mouse Event for Icons and Other Elements
     public void changeScene(String Filename, MouseEvent click, String Title) {
         try {
             Parent parent = FXMLLoader.load(getClass().getResource(Filename));

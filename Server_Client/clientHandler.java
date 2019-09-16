@@ -3,7 +3,6 @@ package Server_Client;
 import Login_Signup.User;
 import Misc.ConnectionClass;
 import Misc.PasswordUtils;
-import javafx.scene.image.Image;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -16,7 +15,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.TimeZone;
+
 
 public class clientHandler implements Runnable {
 
@@ -30,6 +29,7 @@ public class clientHandler implements Runnable {
     private ConnectionClass Student = new ConnectionClass();
     private Connection connection = Student.getconnection();
     private PasswordUtils check = new PasswordUtils();
+    private File f;
 
 
     public clientHandler(Socket client, String name, ObjectOutputStream ObjectOutput, ObjectInputStream ObjectInput, DataOutputStream dataOutput, DataInputStream dataInput) {
@@ -41,8 +41,6 @@ public class clientHandler implements Runnable {
         this.dataOutput = dataOutput;
     }
 
-
-    private File f;
     @Override
     public void run() {
         while (true) {
@@ -65,10 +63,6 @@ public class clientHandler implements Runnable {
                         break;
                     case "GetProfile":
                         ObjectOutput.writeObject(GetProfile());
-                        int need = dataInput.readInt();
-                        if(need==1){
-                            ObjectOutput.writeObject(f);
-                        }
                         break;
                     case "GetFriends":
                         ObjectOutput.writeObject(GetFriends());
@@ -80,6 +74,7 @@ public class clientHandler implements Runnable {
                         dataOutput.writeBoolean(ReqAccept());
                         break;
                     case "UpdateProfile":
+                        System.out.println("Here");
                         dataOutput.writeBoolean(updateProfile());
                         break;
 
@@ -101,30 +96,32 @@ public class clientHandler implements Runnable {
         }
     }
 
+
+    //Request Functions
+
     private boolean updateProfile() {
-        try{
-            System.out.println(System.getProperty("user.dir"));
+        try {
+            System.out.println("HERE@");
             String username = dataInput.readUTF();
             String first = dataInput.readUTF();
             String last = dataInput.readUTF();
             String email = dataInput.readUTF();
             File f = (File) ObjectInput.readObject();
             System.out.println(LocalDateTime.now().toString());
-            String filename=username+".jpg";
-            String path ="src/Server_Client/Server_Files/"+ filename;
+            String filename = username + ".jpg";
+            String path = "src/Server_Client/Server_Files/" + filename;
             File output = new File(path);
-            if(output.createNewFile()){
+            if (output.createNewFile()) {
                 System.out.println("File Created");
             }
             System.out.println(output);
             BufferedImage img = ImageIO.read(f);
-            ImageIO.write(img,"jpg",output);
-            String sql = "Update user set First=\""+ first +"\", Last=\""+ last + "\",Email=\"" + email +"\", Avatar=\""+ path+"\" where username=\"" + username+ "\";";
-            Statement statement= connection.createStatement();
+            ImageIO.write(img, "jpg", output);
+            String sql = "Update user set First=\"" + first + "\", Last=\"" + last + "\",Email=\"" + email + "\", Avatar=\"" + path + "\" where username=\"" + username + "\";";
+            Statement statement = connection.createStatement();
             boolean b = statement.execute(sql);
             return true;
-        }
-        catch (IOException | ClassNotFoundException| SQLException e){
+        } catch (IOException | ClassNotFoundException | SQLException e) {
             e.printStackTrace();
             return false;
         }
@@ -163,14 +160,14 @@ public class clientHandler implements Runnable {
 
 
     private ArrayList<User> GetFriends() {
-        ArrayList<User> friends= new ArrayList<>();
+        ArrayList<User> friends = new ArrayList<>();
         try {
             String user = dataInput.readUTF();
             System.out.println(user);
             String sql = "SELECT * from friend join user on user2=Username where `user1`=\"" + user + "\";";
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(sql);
-            while(rs.next()) {
+            while (rs.next()) {
                 String avatar = rs.getString("Avatar");
                 String first = rs.getString("First");
                 String last = rs.getString("Last");
@@ -182,11 +179,10 @@ public class clientHandler implements Runnable {
                 File p = new File(avatar);
                 user1.setPic(p);
                 friends.add(user1);
-                user1=null;
+                user1 = null;
             }
             System.out.println("Here");
-        }
-        catch(IOException  | SQLException e){
+        } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
         return friends;
@@ -200,19 +196,23 @@ public class clientHandler implements Runnable {
             String sql = "SELECT * from user where `Username`=\"" + user + "\";";
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(sql);
-            while(rs.next()) {
+            while (rs.next()) {
                 String avatar = rs.getString("Avatar");
+                System.out.println(avatar);
                 String first = rs.getString("First");
                 String last = rs.getString("Last");
                 String email = rs.getString("Email");
                 String username = rs.getString("Username");
                 String status = rs.getString("Status");
                 User user1 = new User(avatar, first, last, email, username, "", "", status);
+                System.out.println(System.getProperty("user.dir"));
                 f = new File(avatar);
+                System.out.println(f.exists());
+                user1.setPic(f);
+                System.out.println("Get profile Done");
                 return user1;
             }
-            }
-        catch(IOException  | SQLException e){
+        } catch (IOException | SQLException e) {
             System.out.println(e);
         }
 
@@ -221,27 +221,27 @@ public class clientHandler implements Runnable {
 
 
     private ArrayList<User> Search() {
-        ArrayList<User> names=new ArrayList<User>();
+        ArrayList<User> names = new ArrayList<User>();
         try {
-            String user=dataInput.readUTF();
-            String sql="SELECT `Avatar`,`First`,`Last`,`Username`,`Email`,`Status` FROM `user` WHERE `Username` LIKE \'"+ user + "%\';";
+            String user = dataInput.readUTF();
+            String sql = "SELECT `Avatar`,`First`,`Last`,`Username`,`Email`,`Status` FROM `user` WHERE `Username` LIKE \'" + user + "%\';";
 
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(sql);
-            while(rs.next())
-            {
-                String avatar=rs.getString("Avatar");
-                String first=rs.getString("First");
-                String last=rs.getString("Last");
-                String email=rs.getString("Email");
-                String username=rs.getString("Username");
-                String status=rs.getString("Status");
-                User user1=new User(avatar,first,last,email,username,"","",status);
+            while (rs.next()) {
+                String avatar = rs.getString("Avatar");
+                String first = rs.getString("First");
+                String last = rs.getString("Last");
+                String email = rs.getString("Email");
+                String username = rs.getString("Username");
+                String status = rs.getString("Status");
+                User user1 = new User(avatar, first, last, email, username, "", "", status);
                 names.add(user1);
             }
         } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
+        System.out.println("Search done");
         return names;
 
     }
@@ -260,6 +260,7 @@ public class clientHandler implements Runnable {
                 Spassword = rs.getString("Password");
                 Salt = rs.getString("Salt");
             }
+            System.out.println("Login Done");
             return check.verifyUserPassword(password, Spassword, Salt);
         } catch (IOException | SQLException | InvalidKeySpecException | IllegalArgumentException e) {
             System.out.println(e);
@@ -271,9 +272,10 @@ public class clientHandler implements Runnable {
     private boolean SignUp() {
         try {
             User register = (User) ObjectInput.readObject();
-            String sql = "INSERT INTO user values(\"" + register.getFirst() + "\", \"" + register.getLast() + "\", \"" + register.getEmail() + "\", \"" + register.getUsername() + "\", \"" + register.getPassword() + "\", \"" + register.getSalt() + "\", \"" + register.getStatus() + "\", \" " + "Server_Client/Server_Files/def.jpg" + "\");";
+            String sql = "INSERT INTO user values(\"" + register.getFirst() + "\", \"" + register.getLast() + "\", \"" + register.getEmail() + "\", \"" + register.getUsername() + "\", \"" + register.getPassword() + "\", \"" + register.getSalt() + "\", \"" + register.getStatus() + "\", \"" + "src/Server_Client/Server_Files/def.jpg" + "\");";
             Statement statement = connection.createStatement();
             statement.execute(sql);
+            System.out.println("Signup Done");
             return true;
         } catch (IOException | SQLException | ClassNotFoundException e) {
             System.out.println(e);
