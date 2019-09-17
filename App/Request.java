@@ -30,14 +30,11 @@ import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class addFriend implements Iclose {
+public class Request implements Iclose {
 
 
     @FXML
     private JFXListView friend;
-
-    @FXML
-    private JFXTextField search;
 
     @FXML
     private Pane intro;
@@ -66,33 +63,21 @@ public class addFriend implements Iclose {
     private SceneChange changer = new SceneChange();
 
     public void initialize(){
-        intro.setVisible(true);
-        profile.setVisible(false);
-    }
-
-    @FXML
-    private void updateSearch() {
-        if (search.getText().equals("")) {
-
-        } else {
-            Main.user.sendString("Search");
-            Main.user.sendString(search.getText());
-            Main.user.sendString(SessionInfo.getUsername());
-            ArrayList<User> searchResults = (ArrayList) Main.user.recieveObject();
+        try {
             ArrayList a = new ArrayList();
-            if (searchResults.size() != 0) {
-                for (User test : searchResults) {
+            intro.setVisible(true);
+            profile.setVisible(false);
+            Main.user.sendString("GetRequest");
+            Main.user.sendString(SessionInfo.getUsername());
+            ArrayList<User> requests =(ArrayList)Main.user.recieveObject();
+            if(requests.size()!=0) {
+                for (User test : requests) {
                     HBox hbox = new HBox();
                     hbox.setPadding(new Insets(10, 10, 10, 10));
                     Circle cir = new Circle(30);
                     hbox.setSpacing(25);
                     //Image conversion from file format
-                    Image img = null;
-                    try {
-                        img = SwingFXUtils.toFXImage(ImageIO.read(test.getPic()), null);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    Image img = SwingFXUtils.toFXImage(ImageIO.read(test.getPic()), null);
                     cir.setFill(new ImagePattern(img));
                     Label lbl = new Label(test.getUsername());
                     lbl.setFont(new Font(15));
@@ -103,51 +88,49 @@ public class addFriend implements Iclose {
                     hbox.getChildren().addAll(cir, vbox);
                     a.add(hbox);
                 }
-            }
-            friend.setItems(FXCollections.observableArrayList(a));
-            friend.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    intro.setVisible(false);
-                    profile.setVisible(true);
-                    Main.user.sendString("GetProfile");
-                    String temp = ((Label) ((VBox) ((HBox) (friend.getSelectionModel().getSelectedItem())).getChildren().get(1)).getChildren().get(0)).getText();
-                    Main.user.sendString(temp);
-                    recieved = (User) Main.user.recieveObject();
-                    name.setText(recieved.getFirst() + " " + recieved.getLast());
-                    status.setText(recieved.getStatus());
-                    email.setText(recieved.getEmail());
-                    username.setText(recieved.getUsername());
-                    try {
-                        avatar.setFill(new ImagePattern(SwingFXUtils.toFXImage(ImageIO.read(recieved.getPic()), null)));
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                friend.setItems(FXCollections.observableArrayList(a));
+                friend.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        intro.setVisible(false);
+                        profile.setVisible(true);
+                        Main.user.sendString("GetProfile");
+                        String temp = ((Label) ((VBox) ((HBox) (friend.getSelectionModel().getSelectedItem())).getChildren().get(1)).getChildren().get(0)).getText();
+                        Main.user.sendString(temp);
+                        recieved = (User) Main.user.recieveObject();
+                        name.setText(recieved.getFirst() + " " + recieved.getLast());
+                        status.setText(recieved.getStatus());
+                        email.setText(recieved.getEmail());
+                        username.setText(recieved.getUsername());
+                        try {
+                            avatar.setFill(new ImagePattern(SwingFXUtils.toFXImage(ImageIO.read(recieved.getPic()), null)));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
-                }
-            });
+                });
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
+
     @FXML
     private void addFriend(ActionEvent event){
-        Main.user.sendString("FriendReq");
+        Main.user.sendString("ReqAccept");
         Main.user.sendString(SessionInfo.getUsername());
         Main.user.sendString(username.getText());
         boolean check = Main.user.recieveBoolean();
         if(check){
-            Alert alert = new Alert(Alert.AlertType.INFORMATION,"Success");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Friend Added Successfully");
             alert.showAndWait();
-            search.setText("");
-            profile.setVisible(false);
-            intro.setVisible(true);
         }
         else{
-            Alert alert =new Alert(Alert.AlertType.ERROR,"An Unexpected Error Occurred");
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Error Occurred");
             alert.showAndWait();
         }
     }
-
-
     @FXML
     private void goBack(ActionEvent event){
         changer.changeScene("../App/Anchor.fxml",event, "Home");

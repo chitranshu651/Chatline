@@ -77,6 +77,9 @@ public class clientHandler implements Runnable {
                         System.out.println("Here");
                         dataOutput.writeBoolean(updateProfile());
                         break;
+                    case "GetRequest":
+                        System.out.println("Get request called");
+                        ObjectOutput.writeObject(GetRequest());
 
                 }
             } catch (Exception e) {
@@ -94,6 +97,36 @@ public class clientHandler implements Runnable {
         } catch (IOException e) {
             System.out.println(e);
         }
+    }
+
+    private ArrayList<User> GetRequest() {
+        ArrayList<User> friends = new ArrayList<>();
+        try {
+            String user = dataInput.readUTF();
+            String sql = "Select user.* from user join request on user.Username=request.firstuser where request.seconduser=\"" + user +"\";";
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(sql);
+            while (rs.next()) {
+                String avatar = rs.getString("Avatar");
+                String first = rs.getString("First");
+                String last = rs.getString("Last");
+                String email = rs.getString("Email");
+                String username = rs.getString("Username");
+                String status = rs.getString("Status");
+                System.out.println(username);
+                User user1 = new User(avatar, first, last, email, username, "", "", status);
+                File p = new File(avatar);
+                user1.setPic(p);
+                friends.add(user1);
+                user1 = null;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return friends;
+
     }
 
 
@@ -114,6 +147,10 @@ public class clientHandler implements Runnable {
             if (output.createNewFile()) {
                 System.out.println("File Created");
             }
+            else{
+                output.delete();
+                output.createNewFile();
+            }
             System.out.println(output);
             BufferedImage img = ImageIO.read(f);
             ImageIO.write(img, "jpg", output);
@@ -133,10 +170,11 @@ public class clientHandler implements Runnable {
             String user2 = dataInput.readUTF();
             String sql = "INSERT into friend VALUES(NULL,\"" + user1 + "\",\"" + user2 + "\");";
             String sql1 = "INSERT into friend VALUES(NULL,\"" + user2 + "\",\"" + user1 + "\");";
-            String sql2 = "DELETE from request where firstuser=\"" + user1 + "\" and seconduser=\"" + user2 + "\";";
+            String sql2 = "DELETE from request where firstuser=\"" + user2 + "\" and seconduser=\"" + user1 + "\";";
             Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            ResultSet rs1 = stmt.executeQuery(sql1);
+            stmt.execute(sql);
+            stmt.execute(sql1);
+            stmt.execute(sql2);
             return true;
         } catch (SQLException | IOException e) {
             e.printStackTrace();
@@ -150,7 +188,7 @@ public class clientHandler implements Runnable {
             String user2 = dataInput.readUTF();
             String sql = "INSERT into request VALUES(NULL,\"" + user1 + "\",\"" + user2 + "\");";
             Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(sql);
+            boolean check= statement.execute(sql);
             return true;
         } catch (IOException | SQLException e) {
             e.printStackTrace();
@@ -224,7 +262,8 @@ public class clientHandler implements Runnable {
         ArrayList<User> names = new ArrayList<User>();
         try {
             String user = dataInput.readUTF();
-            String sql = "SELECT `Avatar`,`First`,`Last`,`Username`,`Email`,`Status` FROM `user` WHERE `Username` LIKE \'" + user + "%\';";
+            String current= dataInput.readUTF();
+            String sql = "SELECT `Avatar`,`First`,`Last`,`Username`,`Email`,`Status` FROM `user` WHERE `Username` LIKE \'" + user + "%\' and Username!= \""+ current+"\";";
 
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(sql);
@@ -236,6 +275,7 @@ public class clientHandler implements Runnable {
                 String username = rs.getString("Username");
                 String status = rs.getString("Status");
                 User user1 = new User(avatar, first, last, email, username, "", "", status);
+                user1.setPic(new File(avatar));
                 names.add(user1);
             }
         } catch (IOException | SQLException e) {

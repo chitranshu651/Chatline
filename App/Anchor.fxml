@@ -68,13 +68,13 @@
       </Pane>
       <Pane fx:id="chat" layoutX="337.0" layoutY="53.0" prefHeight="616.0" prefWidth="721.0" style="-fx-background-color: white;" visible="false">
          <children>
-            <Label layoutX="133.0" layoutY="34.0" prefHeight="34.0" prefWidth="102.0" text="Label">
+            <Label fx:id="chatname" layoutX="133.0" layoutY="34.0" prefHeight="39.0" prefWidth="263.0" text="Label">
                <font>
                   <Font size="27.0" />
                </font>
             </Label>
-            <Circle fill="DODGERBLUE" layoutX="65.0" layoutY="68.0" radius="51.0" stroke="BLACK" strokeType="INSIDE" />
-            <Label layoutX="133.0" layoutY="77.0" text="Label" />
+            <Circle fx:id="chatavatar" fill="DODGERBLUE" layoutX="65.0" layoutY="68.0" radius="51.0" stroke="BLACK" strokeType="INSIDE" />
+            <Label fx:id="chatstatus" layoutX="133.0" layoutY="77.0" prefHeight="21.0" prefWidth="142.0" text="Label" />
             <JFXButton layoutX="537.0" layoutY="34.0" onAction="#startVideo" prefHeight="36.0" prefWidth="67.0" text=" ">
                <graphic>
                   <FontAwesomeIconView glyphName="VIDEO_CAMERA" size="25" wrappingWidth="29.0" />
@@ -108,6 +108,11 @@
                </font>
             </Label>
             <JFXButton layoutX="266.0" layoutY="14.0" onAction="#addFriend" prefHeight="21.0" prefWidth="42.0" text=" ">
+               <graphic>
+                  <FontAwesomeIconView glyphName="SEARCH_PLUS" size="25" />
+               </graphic>
+            </JFXButton>
+            <JFXButton layoutX="209.0" layoutY="14.0" onAction="#request" prefHeight="21.0" prefWidth="42.0" text=" ">
                <graphic>
                   <FontAwesomeIconView glyphName="USER_PLUS" size="25" />
                </graphic>

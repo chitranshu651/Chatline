@@ -75,7 +75,16 @@ public class Anchor implements Iclose
     @FXML
     private JFXTextField usermessage;
 
+    @FXML
+    private Label chatname;
 
+    @FXML
+    private Circle chatavatar;
+
+    @FXML
+    private Label chatstatus;
+
+    private User recieved;
     @FXML
     private void addFriend(ActionEvent click){
         changer.changeScene("../App/addFriend.fxml",click,"Add Friend");
@@ -108,6 +117,7 @@ public class Anchor implements Iclose
 
     private void updateFriends(String username) throws IOException {
         //Send User Details
+
         Main.user.sendString("GetFriends");
         Main.user.sendString(username);
         //Recieve List of Friends
@@ -115,22 +125,24 @@ public class Anchor implements Iclose
         friend.setItems(FXCollections.observableArrayList(friends));
         ArrayList a = new ArrayList();
         //Creating Custom List View for Displaying Friends
-        for(User test : friends){
-            HBox hbox = new HBox();
-            hbox.setPadding(new Insets(10,10,10,10));
-            Circle cir = new Circle(30);
-            hbox.setSpacing(25);
-            //Image conversion from file format
-            Image img = SwingFXUtils.toFXImage(ImageIO.read(test.getPic()),null);
-            cir.setFill(new ImagePattern(img));
-            Label lbl = new Label(test.getUsername());
-            lbl.setFont(new Font(15));
-            Label mess = new Label(test.getStatus());
-            mess.setFont(new Font(12));
-            VBox vbox = new VBox();
-            vbox.getChildren().addAll(lbl,mess);
-            hbox.getChildren().addAll(cir,vbox);
-            a.add(hbox);
+        if(friends.size()!=0) {
+            for (User test : friends) {
+                HBox hbox = new HBox();
+                hbox.setPadding(new Insets(10, 10, 10, 10));
+                Circle cir = new Circle(30);
+                hbox.setSpacing(25);
+                //Image conversion from file format
+                Image img = SwingFXUtils.toFXImage(ImageIO.read(test.getPic()), null);
+                cir.setFill(new ImagePattern(img));
+                Label lbl = new Label(test.getUsername());
+                lbl.setFont(new Font(15));
+                Label mess = new Label(test.getStatus());
+                mess.setFont(new Font(12));
+                VBox vbox = new VBox();
+                vbox.getChildren().addAll(lbl, mess);
+                hbox.getChildren().addAll(cir, vbox);
+                a.add(hbox);
+            }
         }
         friend.setItems(FXCollections.observableArrayList(a));
         friend.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -139,13 +151,25 @@ public class Anchor implements Iclose
                proflie.setVisible(false);
                chat.setVisible(true);
                String tosend = ((Label) ((VBox) ((HBox) (friend.getSelectionModel().getSelectedItem())).getChildren().get(1)).getChildren().get(0)).getText();
-               /*Main.user.sendString("UpdateChatView");
+               Main.user.sendString("GetProfile");
                Main.user.sendString(tosend);
-               User recieved = (User)Main.user.recieveObject();
-*/
+               recieved = (User)Main.user.recieveObject();
+               chatname.setText(recieved.getFirst() + " " + recieved.getLast());
+               chatstatus.setText(recieved.getStatus());
+                try {
+                    chatavatar.setFill(new ImagePattern(SwingFXUtils.toFXImage(ImageIO.read(recieved.getPic()),null)));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
 
             }
         });
+    }
+
+    @FXML
+    private void request(ActionEvent event){
+        changer.changeScene("../App/Request.fxml",event, "See Requests");
     }
 
     @FXML
