@@ -2,6 +2,7 @@ package App;
 
 import Login_Signup.User;
 import Misc.Iclose;
+import Misc.MyMessage;
 import Misc.SceneChange;
 import Misc.SessionInfo;
 import VideoCalling.VideoCallingService1;
@@ -35,6 +36,7 @@ import sample.Main;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 public class Anchor implements Iclose
@@ -83,6 +85,7 @@ public class Anchor implements Iclose
 
     @FXML
     private Label chatstatus;
+
 
     private User recieved;
     @FXML
@@ -185,7 +188,17 @@ public class Anchor implements Iclose
 
     @FXML
     private void send(ActionEvent event){
-        //TODO message send
+        MyMessage message = new MyMessage();
+        message.setSender(SessionInfo.getUsername());
+        message.setReciever(recieved.getUsername());
+        message.setMessage(usermessage.getText());
+        message.setTime(new Timestamp(System.currentTimeMillis()));
+        Main.user.sendString("SendMessage");
+        try {
+            Main.user.sendObject(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     //Window Controls

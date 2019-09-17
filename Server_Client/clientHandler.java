@@ -2,6 +2,7 @@ package Server_Client;
 
 import Login_Signup.User;
 import Misc.ConnectionClass;
+import Misc.MyMessage;
 import Misc.PasswordUtils;
 
 import javax.imageio.ImageIO;
@@ -80,7 +81,15 @@ public class clientHandler implements Runnable {
                     case "GetRequest":
                         System.out.println("Get request called");
                         ObjectOutput.writeObject(GetRequest());
-
+                        break;
+                    case "GetMessages":
+                        System.out.println("Get Message Called");
+                        ObjectOutput.writeObject(GetMessages());
+                        break;
+                    case "SendMessage":
+                        System.out.println("send Message called");
+                        dataOutput.writeBoolean(SendMessage());
+                        break;
                 }
             } catch (Exception e) {
                 System.out.println(e);
@@ -98,6 +107,10 @@ public class clientHandler implements Runnable {
             System.out.println(e);
         }
     }
+
+
+
+    //Request Functions
 
     private ArrayList<User> GetRequest() {
         ArrayList<User> friends = new ArrayList<>();
@@ -129,8 +142,6 @@ public class clientHandler implements Runnable {
 
     }
 
-
-    //Request Functions
 
     private boolean updateProfile() {
         try {
@@ -323,5 +334,39 @@ public class clientHandler implements Runnable {
         return false;
     }
 
-
+    private ArrayList<MyMessage> GetMessages(){
+        ArrayList<MyMessage> messages = new ArrayList<>();
+        try{
+            String user1 = dataInput.readUTF();
+            String user2 = dataInput.readUTF();
+            String sql = "SELECT * from messages where sender or receiver=\"" + user1 + "\" and sender or reciever =\""+ user2 + "\";";
+            Statement stmt = connection.createStatement();
+            ResultSet rs= stmt.executeQuery(sql);
+            while(rs.next()){
+                MyMessage message = new MyMessage();
+                message.setMessage(rs.getString("message"));
+                message.setReciever(rs.getString("reciever"));
+                message.setSender(rs.getString("sender"));
+                message.setTime(rs.getTimestamp("time"));
+                messages.add(message);
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return messages;
+    }
+    private boolean SendMessage(){
+        try{
+            MyMessage message = (MyMessage) ObjectInput.readObject();
+            String sql = "Insert into messages values(NULL,\""+ message.getSender()+ "\", \""+ message.getReciever() +"\" , \"" + message.getMessage() + "\", \"" + message.getTime()+ "\");";
+            Statement stmt = connection.createStatement();
+            stmt.execute(sql);
+            return true;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
