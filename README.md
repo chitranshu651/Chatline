@@ -30,7 +30,7 @@ Chatline is a video calling service made for Softablitz-2019.
 ## Installation
 1. Clone the repository using:
 ```bash
-git clone https://github.com/chitranshu651/Linus.git
+git clone https://github.com/chitranshu651/Chatline.git
 ```
 2. Run the Jar file
 ```bash
