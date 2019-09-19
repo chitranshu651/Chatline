@@ -4,6 +4,7 @@ import Login_Signup.User;
 import Misc.Iclose;
 import Misc.SceneChange;
 import Misc.SessionInfo;
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
 import javafx.collections.FXCollections;
@@ -50,6 +51,9 @@ public class addFriend implements Iclose {
     private Circle avatar;
 
     @FXML
+    private JFXButton add;
+
+    @FXML
     private Label name;
 
     @FXML
@@ -88,6 +92,15 @@ public class addFriend implements Iclose {
                 status.setText(recieved.getStatus());
                 email.setText(recieved.getEmail());
                 username.setText(recieved.getUsername());
+                Main.user.sendString("CheckFriend");
+                Main.user.sendString(SessionInfo.getUsername());
+                Main.user.sendString(temp);
+                if(Main.user.recieveBoolean()){
+                    add.setDisable(true);
+                }
+                else{
+                    add.setDisable(false);
+                }
                 try {
                     avatar.setFill(new ImagePattern(SwingFXUtils.toFXImage(ImageIO.read(recieved.getPic()), null)));
                 } catch (IOException e) {

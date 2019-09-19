@@ -1,5 +1,6 @@
 package sample;
 
+import Misc.SessionInfo;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -19,7 +20,12 @@ public class Main extends Application {
         primaryStage.show();
     }
 
-
+    @Override
+    public void stop() throws Exception{
+        Main.user.sendString("Disconnect");
+        Main.user.sendString(SessionInfo.getUsername());
+        SessionInfo.getVideocalling().threadRun=false;
+    }
     public static void main(String[] args) {
         launch(args);
     }

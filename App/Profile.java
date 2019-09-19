@@ -55,6 +55,7 @@ public class Profile implements Iclose {
     @FXML
     private JFXToggleButton tstatus;
 
+    private boolean change =false;
 
     private File file;
 
@@ -117,6 +118,7 @@ public class Profile implements Iclose {
         last.setDisable(true);
         email.setDisable(true);
         input.setDisable(true);
+        statustxt.setDisable(true);
         //Getting User Data to Update fields
         Main.user.sendString("GetProfile");
         Main.user.sendString(SessionInfo.getUsername());
@@ -125,6 +127,8 @@ public class Profile implements Iclose {
         first.setText(user.getFirst());
         last.setText(user.getLast());
         email.setText(user.getEmail());
+        statustxt.setText(user.getStatus());
+        file = user.getPic();
     }
 
     @FXML
@@ -137,6 +141,7 @@ public class Profile implements Iclose {
         file = fileChooser.showOpenDialog((Stage)((Node)(click.getSource())).getScene().getWindow());
         if(!file.exists()){
             //Check for File
+            change=true;
             Alert alert = new Alert(Alert.AlertType.ERROR, "File doesn't exist");
             alert.showAndWait();
         }
@@ -159,6 +164,8 @@ public class Profile implements Iclose {
         Main.user.sendString(first.getText());
         Main.user.sendString(last.getText());
         Main.user.sendString(email.getText());
+        Main.user.sendString(statustxt.getText());
+        Main.user.writeBoolean(change);
         try {
             System.out.println("NO error");
             Main.user.sendObject(file);

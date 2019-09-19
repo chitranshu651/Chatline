@@ -77,4 +77,12 @@ public class Client {
         }
     }
 
+    public void writeBoolean(boolean bool){
+        try {
+            ObjectOutput.writeBoolean(bool);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

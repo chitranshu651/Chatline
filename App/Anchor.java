@@ -86,6 +86,12 @@ public class Anchor implements Iclose
     @FXML
     private Label chatstatus;
 
+    @FXML
+    private Circle green;
+
+    @FXML
+    private Circle red;
+
 
     private User recieved;
     @FXML
@@ -98,18 +104,24 @@ public class Anchor implements Iclose
         proflie.setVisible(true);
         chat.setVisible(false);
         String username = SessionInfo.getUsername();
+        System.out.println("Up until here");
         Main.user.sendString("GetProfile");
         Main.user.sendString(username);
         User temp= (User)Main.user.recieveObject();
+        System.out.println("Object Recieved");
         Image img = SwingFXUtils.toFXImage(ImageIO.read(temp.getPic()),null);
+        System.out.println("Image Conversion Error");
         //Setting of User Details in Profile Page
         avatar.setFill(new ImagePattern(img));
+        System.out.println("Retrieve Done");
         first.setText(temp.getFirst());
         last.setText(temp.getLast());
         status.setText(temp.getStatus());
         user.setText(temp.getUsername());
         updateFriends(username);
+        System.out.println("This done");
         email.setText(temp.getEmail());
+
     }
 
     @FXML
@@ -163,6 +175,16 @@ public class Anchor implements Iclose
                     chatavatar.setFill(new ImagePattern(SwingFXUtils.toFXImage(ImageIO.read(recieved.getPic()),null)));
                 } catch (IOException e) {
                     e.printStackTrace();
+                }
+                Main.user.sendString("CheckOnline");
+                Main.user.sendString(tosend);
+                if(Main.user.recieveBoolean()){
+                    green.setVisible(true);
+                    red.setVisible(false);
+                }
+                else{
+                    red.setVisible(true);
+                    green.setVisible(false);
                 }
 
 

@@ -56,15 +56,16 @@ public class Login implements Iclose {
         Main.user.sendString("Login");
         Main.user.sendString(username);
         Main.user.sendString(password);
+        Main.user.sendString("22222");
         //Recieve if user exists or not
         boolean login = Main.user.recieveBoolean();
         if(login){
             System.out.println("Login Successful");
 
             SessionInfo.setUsername(username);
-//
-//            videocalling.start();
-//            SessionInfo.setVideocalling(videocalling);
+
+            videocalling.start();
+            SessionInfo.setVideocalling(videocalling);
         changer.changeScene("../App/Anchor.fxml", click, "Hi");
         }
         else{

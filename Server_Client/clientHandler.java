@@ -4,6 +4,7 @@ import Login_Signup.User;
 import Misc.ConnectionClass;
 import Misc.MyMessage;
 import Misc.PasswordUtils;
+import sample.Main;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -86,11 +87,25 @@ public class clientHandler implements Runnable {
                         System.out.println("Get Message Called");
                         ObjectOutput.writeObject(GetMessages());
                         break;
-                    case "SendMessage":
-                        System.out.println("send Message called");
+                    case "SendMessage": System.out.println("send Message called");
                         dataOutput.writeBoolean(SendMessage());
                         break;
-
+                    case "FriendSuggestion":
+                        System.out.println("friend suggestion");
+                        ObjectOutput.writeObject(GetSuggestions());
+                        break;
+                    case "CheckOnline":
+                        System.out.println("online check");
+                        dataOutput.writeBoolean(CheckOnline());
+                        break;
+                    case "Disconnect":
+                        System.out.println("disconnect");
+                        dataOutput.writeBoolean(Disconnect());
+                        break;
+                    case "CheckFriend":
+                        System.out.println("Check Friend Called");
+                        dataOutput.writeBoolean(CheckFriend());
+                        break;
                 }
             } catch (Exception e) {
                 System.out.println(e);
@@ -109,12 +124,93 @@ public class clientHandler implements Runnable {
         }
     }
 
+    private boolean CheckFriend() {
+        try{
+            boolean check =false;
+            String user1=dataInput.readUTF();
+            String user2=dataInput.readUTF();
+            String sql = "Select * from friend where user1=\""+ user1 +"\" and user2=\""+ user2 + "\";";
+            Statement statement =connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()){
+                check=true;
+            }
+            return check;
+        }
+        catch (SQLException | IOException e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private boolean Disconnect() {
+        try{
+            String user=dataInput.readUTF();
+            String sql="DELETE from Online_Status where username=\"" + user + "\";";
+            Statement stmt=connection.createStatement();
+            stmt.execute(sql);
+            return true;
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private boolean CheckOnline() {
+        try {
+            boolean flag=false;
+            String user=dataInput.readUTF();
+            String sql="Select Username from Online_Status where Username=\""+user+"\";";
+            Statement stmt=connection.createStatement();
+            ResultSet rs=stmt.executeQuery(sql);
+            while(rs.next())
+            {
+                flag=true;
+            }
+            if(flag==true)
+                return true;
+            else
+                return false;
+        }catch(Exception e){
+            e.getStackTrace();
+        }
+        return false;
+    }
+
+    private ArrayList<User> GetSuggestions() {
+        ArrayList<User> suggestions=new ArrayList<>();
+        User user1;
+        try {
+            String user=dataInput.readUTF();
+            String sql="SELECT * from user where Username in (SELECT DISTINCT user2 from friend where user1 in (SELECT user2 from friend where user1=\""+user+"\") AND user2 != \""+user+"\");";
+            Statement stmt=connection.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while(rs.next())
+            {
+                String avatar = rs.getString("Avatar");
+                String first = rs.getString("First");
+                String last = rs.getString("Last");
+                String email = rs.getString("Email");
+                String username = rs.getString("Username");
+                String status = rs.getString("Status");
+                System.out.println(username);
+                user1 = new User(avatar, first, last, email, username, "", "", status);
+                File p = new File(avatar);
+                user1.setPic(p);
+                suggestions.add(user1);
+            }
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return suggestions;
+    }
 
 
     //Request Functions
 
     private ArrayList<User> GetRequest() {
         ArrayList<User> friends = new ArrayList<>();
+        User user1;
         try {
             String user = dataInput.readUTF();
             String sql = "Select user.* from user join request on user.Username=request.firstuser where request.seconduser=\"" + user +"\";";
@@ -128,11 +224,10 @@ public class clientHandler implements Runnable {
                 String username = rs.getString("Username");
                 String status = rs.getString("Status");
                 System.out.println(username);
-                User user1 = new User(avatar, first, last, email, username, "", "", status);
+                user1 = new User(avatar, first, last, email, username, "", "", status);
                 File p = new File(avatar);
                 user1.setPic(p);
                 friends.add(user1);
-                user1 = null;
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -151,22 +246,29 @@ public class clientHandler implements Runnable {
             String first = dataInput.readUTF();
             String last = dataInput.readUTF();
             String email = dataInput.readUTF();
+            String status = dataInput.readUTF();
+            Boolean change = ObjectInput.readBoolean();
             File f = (File) ObjectInput.readObject();
             System.out.println(LocalDateTime.now().toString());
             String filename = username + ".jpg";
             String path = "src/Server_Client/Server_Files/" + filename;
-            File output = new File(path);
-            if (output.createNewFile()) {
-                System.out.println("File Created");
+            File output;
+            if(change) {
+                 output = new File(path);
+                if (output.createNewFile()) {
+                    System.out.println("File Created");
+                } else {
+                    output.delete();
+                    output.createNewFile();
+                }
             }
             else{
-                output.delete();
-                output.createNewFile();
+                output = f;
             }
             System.out.println(output);
             BufferedImage img = ImageIO.read(f);
             ImageIO.write(img, "jpg", output);
-            String sql = "Update user set First=\"" + first + "\", Last=\"" + last + "\",Email=\"" + email + "\", Avatar=\"" + path + "\" where username=\"" + username + "\";";
+            String sql = "Update user set First=\"" + first + "\", Last=\"" + last + "\",Email=\"" + email + "\", Avatar=\"" + path + "\", Status=\""+ status + "\" where username=\"" + username + "\";";
             Statement statement = connection.createStatement();
             boolean b = statement.execute(sql);
             return true;
@@ -302,6 +404,7 @@ public class clientHandler implements Runnable {
         try {
             String username = dataInput.readUTF();
             String password = dataInput.readUTF();
+            String port = dataInput.readUTF();
             String sql = "SELECT `Password`, `Salt` FROM `user` WHERE `Username`=\"" + username + "\";";
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(sql);
@@ -313,7 +416,13 @@ public class clientHandler implements Runnable {
                 Salt = rs.getString("Salt");
             }
             System.out.println("Login Done");
-            return check.verifyUserPassword(password, Spassword, Salt);
+            if(check.verifyUserPassword(password, Spassword, Salt))
+            {
+                String sql1="Insert into Online_Status VALUES(\""+username+"\",\""+ client.getInetAddress()+"\",\""+ port+"\");";
+                statement=connection.createStatement();
+                statement.execute(sql1);
+                return true;
+            }
         } catch (IOException | SQLException | InvalidKeySpecException | IllegalArgumentException e) {
             System.out.println(e);
         }
@@ -357,12 +466,29 @@ public class clientHandler implements Runnable {
         }
         return messages;
     }
+
+
     private boolean SendMessage(){
         try{
+            boolean flag=false;
             MyMessage message = (MyMessage) ObjectInput.readObject();
-            String sql = "Insert into messages values(NULL,\""+ message.getSender()+ "\", \""+ message.getReciever() +"\" , \"" + message.getMessage() + "\", \"" + message.getTime()+ "\");";
+            String sql1 = "Insert into messages values(NULL,\""+ message.getSender()+ "\", \""+ message.getReciever() +"\" , \"" + message.getMessage() + "\", \"" + message.getTime()+ "\");";
             Statement stmt = connection.createStatement();
-            stmt.execute(sql);
+            stmt.execute(sql1);
+            String receiver_m=message.getReciever();
+            String sql2 = "Select status from Online_Status where user=\'"+receiver_m+"\';";
+            stmt=connection.createStatement();
+            ResultSet rs=stmt.executeQuery(sql2);
+            String receiver_t = null;
+            while(rs.next()) {
+                flag = true;
+            //    receiver_t = rs.getString("status");
+            }
+            if(flag==false) {
+                String sql3 = "Insert into Notifications VALUES(\"" + receiver_m + "\",1,\"" + message.getSender() + "\");";
+                stmt = connection.createStatement();
+                stmt.execute(sql3);
+            }
             return true;
         }
         catch (Exception e){

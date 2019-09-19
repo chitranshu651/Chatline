@@ -41,7 +41,7 @@
             <AnchorPane prefHeight="616.0" prefWidth="716.0" style="-fx-background-color: white;">
                <children>
                   <Circle fx:id="avatar" fill="DODGERBLUE" layoutX="316.0" layoutY="163.0" radius="75.0" stroke="BLACK" strokeType="INSIDE" />
-                  <JFXButton buttonType="RAISED" layoutX="600.0" layoutY="26.0" onAction="#addFriend" style="-fx-background-color: #1bf2b9;" text="Add">
+                  <JFXButton fx:id="add" buttonType="RAISED" layoutX="600.0" layoutY="26.0" onAction="#addFriend" style="-fx-background-color: #1bf2b9;" text="Add">
                      <graphic>
                         <FontAwesomeIconView glyphName="USER_PLUS" size="20" />
                      </graphic>
