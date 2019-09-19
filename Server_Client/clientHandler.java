@@ -90,6 +90,7 @@ public class clientHandler implements Runnable {
                         System.out.println("send Message called");
                         dataOutput.writeBoolean(SendMessage());
                         break;
+
                 }
             } catch (Exception e) {
                 System.out.println(e);

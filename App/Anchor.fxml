@@ -117,6 +117,11 @@
                   <FontAwesomeIconView glyphName="USER_PLUS" size="25" />
                </graphic>
             </JFXButton>
+            <JFXButton layoutX="19.0" layoutY="20.0" onAction="#home" prefHeight="21.0" prefWidth="42.0" text=" ">
+               <graphic>
+                  <FontAwesomeIconView glyphName="HOME" size="25" />
+               </graphic>
+            </JFXButton>
          </children>
       </AnchorPane>
    </children>

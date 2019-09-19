@@ -62,11 +62,10 @@ public class Login implements Iclose {
             System.out.println("Login Successful");
 
             SessionInfo.setUsername(username);
-
-            /*videocalling.start();
-            SessionInfo.setVideocalling(videocalling);
-            */
-            changer.changeScene("../App/Anchor.fxml", click, "Hi");
+//
+//            videocalling.start();
+//            SessionInfo.setVideocalling(videocalling);
+        changer.changeScene("../App/Anchor.fxml", click, "Hi");
         }
         else{
             Alert alert = new Alert(Alert.AlertType.ERROR,"Username Password didn't match");

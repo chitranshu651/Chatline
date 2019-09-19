@@ -68,6 +68,58 @@ public class addFriend implements Iclose {
     public void initialize(){
         intro.setVisible(true);
         profile.setVisible(false);
+        ArrayList a = new ArrayList();
+        Main.user.sendString("FriendSuggestion");
+        Main.user.sendString(SessionInfo.getUsername());
+        ArrayList<User> suggestions = ((ArrayList) Main.user.recieveObject());
+        updateListView(a, suggestions);
+
+        friend.setItems(FXCollections.observableArrayList(a));
+        friend.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                intro.setVisible(false);
+                profile.setVisible(true);
+                Main.user.sendString("GetProfile");
+                String temp = ((Label) ((VBox) ((HBox) (friend.getSelectionModel().getSelectedItem())).getChildren().get(1)).getChildren().get(0)).getText();
+                Main.user.sendString(temp);
+                recieved = (User) Main.user.recieveObject();
+                name.setText(recieved.getFirst() + " " + recieved.getLast());
+                status.setText(recieved.getStatus());
+                email.setText(recieved.getEmail());
+                username.setText(recieved.getUsername());
+                try {
+                    avatar.setFill(new ImagePattern(SwingFXUtils.toFXImage(ImageIO.read(recieved.getPic()), null)));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void updateListView(ArrayList a, ArrayList<User> suggestions) {
+        for (User test : suggestions) {
+            HBox hbox = new HBox();
+            hbox.setPadding(new Insets(10, 10, 10, 10));
+            Circle cir = new Circle(30);
+            hbox.setSpacing(25);
+            //Image conversion from file format
+            Image img = null;
+            try {
+                img = SwingFXUtils.toFXImage(ImageIO.read(test.getPic()), null);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            cir.setFill(new ImagePattern(img));
+            Label lbl = new Label(test.getUsername());
+            lbl.setFont(new Font(15));
+            Label mess = new Label(test.getStatus());
+            mess.setFont(new Font(12));
+            VBox vbox = new VBox();
+            vbox.getChildren().addAll(lbl, mess);
+            hbox.getChildren().addAll(cir, vbox);
+            a.add(hbox);
+        }
     }
 
     @FXML
@@ -81,50 +133,10 @@ public class addFriend implements Iclose {
             ArrayList<User> searchResults = (ArrayList) Main.user.recieveObject();
             ArrayList a = new ArrayList();
             if (searchResults.size() != 0) {
-                for (User test : searchResults) {
-                    HBox hbox = new HBox();
-                    hbox.setPadding(new Insets(10, 10, 10, 10));
-                    Circle cir = new Circle(30);
-                    hbox.setSpacing(25);
-                    //Image conversion from file format
-                    Image img = null;
-                    try {
-                        img = SwingFXUtils.toFXImage(ImageIO.read(test.getPic()), null);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    cir.setFill(new ImagePattern(img));
-                    Label lbl = new Label(test.getUsername());
-                    lbl.setFont(new Font(15));
-                    Label mess = new Label(test.getStatus());
-                    mess.setFont(new Font(12));
-                    VBox vbox = new VBox();
-                    vbox.getChildren().addAll(lbl, mess);
-                    hbox.getChildren().addAll(cir, vbox);
-                    a.add(hbox);
-                }
+                updateListView(a, searchResults);
             }
             friend.setItems(FXCollections.observableArrayList(a));
-            friend.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    intro.setVisible(false);
-                    profile.setVisible(true);
-                    Main.user.sendString("GetProfile");
-                    String temp = ((Label) ((VBox) ((HBox) (friend.getSelectionModel().getSelectedItem())).getChildren().get(1)).getChildren().get(0)).getText();
-                    Main.user.sendString(temp);
-                    recieved = (User) Main.user.recieveObject();
-                    name.setText(recieved.getFirst() + " " + recieved.getLast());
-                    status.setText(recieved.getStatus());
-                    email.setText(recieved.getEmail());
-                    username.setText(recieved.getUsername());
-                    try {
-                        avatar.setFill(new ImagePattern(SwingFXUtils.toFXImage(ImageIO.read(recieved.getPic()), null)));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
+
         }
     }
 
@@ -152,6 +164,8 @@ public class addFriend implements Iclose {
     private void goBack(ActionEvent event){
         changer.changeScene("../App/Anchor.fxml",event, "Home");
     }
+
+
     public void close(MouseEvent click){
         Stage window = (Stage) ((Node) click.getSource()).getScene().getWindow();
         window.close();

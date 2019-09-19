@@ -7,59 +7,67 @@ import java.io.ObjectInputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.Scanner;
 
 public class VideoCallingService1 extends Thread {
     static Socket socket=new Socket();
 
     public static boolean exit= false;
+    private VideoStreamHandler videoStreamHandler =new VideoStreamHandler();
+    public volatile boolean threadRun =true;
+    private ServerSocket serverSocket;
 
     public void run()   {
-        try {
-            Scanner sc = new Scanner(System.in);
-            System.out.print("Enter port:");
-            int port =sc.nextInt();
-            sc.close();
-            ServerSocket serverSocket = new ServerSocket(port);
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter port:");
+        int port =sc.nextInt();
+        sc.close();
+        try{
+            serverSocket = new ServerSocket(port);
+            serverSocket.setSoTimeout(1000);
             System.out.println("Server Started open for video calling");
-            JLabel l = new JLabel();
-            JFrame jFrame = new JFrame();
-            jFrame.setSize(640,360);
-            jFrame.setDefaultCloseOperation(jFrame.EXIT_ON_CLOSE);
-            l.setSize(640,480);
-            jFrame.add(l);
-            serverSocket.setSoTimeout(500);
-            while(!socket.isConnected() && !exit) {
-                socket = serverSocket.accept();
-            }
-            if(socket.isConnected()) {
-                System.out.println("Connected");
-                ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-                l.setVisible(true);
-                jFrame.setVisible(true);
-                while (true) {
-                    if (exit) {
-                        break;
+            while (true) {
+                if(!threadRun){
+                    videoStreamHandler.threadRun=false;
+                    try {
+                        videoStreamHandler.join();
                     }
-                    Thread.sleep(100);
-                    l.setIcon((ImageIcon) in.readObject());
+                    catch (InterruptedException e){
+                        e.printStackTrace();
+                    }
+                    break;
                 }
-                in.close();
-                serverSocket.close();
-            }
-            else{
-                serverSocket.close();
-            }
+                try {
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (HeadlessException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+                   try{
+
+                        socket = serverSocket.accept();
+                        videoStreamHandler.threadRun = false;
+                        videoStreamHandler.addClient(socket);
+                        videoStreamHandler.join();
+                        videoStreamHandler.threadRun= true;
+                        videoStreamHandler.start();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                catch (Exception e){
+
+                }
+            }
+            try {
+                serverSocket.close();
+            }
+            catch (Exception e){
+                System.out.println(e);
+            }
         }
+        catch (Exception e){
+            System.out.println("Server could not be started");
+        }
+
+
 
     }
 }

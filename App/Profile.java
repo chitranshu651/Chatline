@@ -49,6 +49,13 @@ public class Profile implements Iclose {
     @FXML
     private JFXToggleButton tavatar;
 
+    @FXML
+    private JFXTextField statustxt;
+
+    @FXML
+    private JFXToggleButton tstatus;
+
+
     private File file;
 
     private SceneChange changer = new SceneChange();
@@ -91,6 +98,16 @@ public class Profile implements Iclose {
         }
         else{
             last.setDisable(true);
+        }
+    }
+
+    @FXML
+    void estatus(ActionEvent event) {
+        if(tstatus.isSelected()){
+            statustxt.setDisable(false);
+        }
+        else{
+            statustxt.setDisable(true);
         }
     }
     @FXML

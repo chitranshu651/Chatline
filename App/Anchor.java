@@ -201,6 +201,12 @@ public class Anchor implements Iclose
         }
     }
 
+    @FXML
+    private void home(ActionEvent click){
+        proflie.setVisible(true);
+        chat.setVisible(false);
+    }
+
     //Window Controls
     public void close(MouseEvent click){
         /*VideoCallingService1 video = SessionInfo.getVideocalling();
