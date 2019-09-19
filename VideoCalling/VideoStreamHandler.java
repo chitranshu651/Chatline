@@ -48,9 +48,9 @@ public class VideoStreamHandler extends Thread{
         System.out.println("In run");
         Webcam webcam = Webcam.getDefault();
         webcam.setViewSize(new Dimension(640,480));
-        System.out.println("LAUDA");
         Thread t = Thread.currentThread();
         webcam.open();
+        boolean exit=false;
         while(threadRun){
             bf= webcam.getImage();
             image= new ImageIcon(bf);
@@ -62,8 +62,14 @@ public class VideoStreamHandler extends Thread{
                     }
                     catch (Exception e){
                         System.out.println(e);
+                        objectOutputStreams.remove(os);
+                        break;
                     }
             }
+            if(objectOutputStreams.size()==0){
+                break;
+            }
+
         }
         webcam.close();
 

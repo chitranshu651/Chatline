@@ -2,6 +2,7 @@ package Server_Client;
 
 import Login_Signup.User;
 import Misc.ConnectionClass;
+import Misc.IPClass;
 import Misc.MyMessage;
 import Misc.PasswordUtils;
 import sample.Main;
@@ -106,6 +107,9 @@ public class clientHandler implements Runnable {
                         System.out.println("Check Friend Called");
                         dataOutput.writeBoolean(CheckFriend());
                         break;
+                    case "StartVideo":
+                        System.out.println("Start video call");
+                         ObjectOutput.writeObject(StartVideo());
                 }
             } catch (Exception e) {
                 System.out.println(e);
@@ -122,6 +126,27 @@ public class clientHandler implements Runnable {
         } catch (IOException e) {
             System.out.println(e);
         }
+    }
+
+    private IPClass StartVideo() {
+        try{
+            String user = dataInput.readUTF();
+            String sql = "Select * from online_status where Username =\"" + user + "\";";
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(sql);
+            IPClass ipClass=null;
+            if (rs.next()){
+                ipClass =new IPClass();
+                ipClass.setIp(rs.getString("IP"));
+                ipClass.setPort(rs.getString("Port"));
+                ipClass.setUsername(rs.getString("Username"));
+            }
+            return ipClass;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private boolean CheckFriend() {
@@ -418,7 +443,7 @@ public class clientHandler implements Runnable {
             System.out.println("Login Done");
             if(check.verifyUserPassword(password, Spassword, Salt))
             {
-                String sql1="Insert into Online_Status VALUES(\""+username+"\",\""+ client.getInetAddress()+"\",\""+ port+"\");";
+                String sql1="Insert into Online_Status VALUES(\""+username+"\",\""+ client.getInetAddress().getHostAddress()+"\",\""+ port+"\");";
                 statement=connection.createStatement();
                 statement.execute(sql1);
                 return true;

@@ -25,6 +25,7 @@ public class Main extends Application {
         Main.user.sendString("Disconnect");
         Main.user.sendString(SessionInfo.getUsername());
         SessionInfo.getVideocalling().threadRun=false;
+
     }
     public static void main(String[] args) {
         launch(args);

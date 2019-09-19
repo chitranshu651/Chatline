@@ -75,12 +75,12 @@
             </Label>
             <Circle fx:id="chatavatar" fill="DODGERBLUE" layoutX="65.0" layoutY="68.0" radius="51.0" stroke="BLACK" strokeType="INSIDE" />
             <Label fx:id="chatstatus" layoutX="133.0" layoutY="77.0" prefHeight="21.0" prefWidth="142.0" text="Label" />
-            <JFXButton layoutX="537.0" layoutY="34.0" onAction="#startVideo" prefHeight="36.0" prefWidth="67.0" text=" ">
+            <JFXButton fx:id="vbtn" layoutX="537.0" layoutY="34.0" onAction="#startVideo" prefHeight="36.0" prefWidth="67.0" text=" ">
                <graphic>
                   <FontAwesomeIconView glyphName="VIDEO_CAMERA" size="25" wrappingWidth="29.0" />
                </graphic>
             </JFXButton>
-            <JFXButton layoutX="623.0" layoutY="30.0" onAction="#startAudio" prefHeight="42.0" prefWidth="67.0" text=" ">
+            <JFXButton fx:id="abtn" layoutX="623.0" layoutY="30.0" onAction="#startAudio" prefHeight="42.0" prefWidth="67.0" text=" ">
                <graphic>
                   <FontAwesomeIconView glyphName="PHONE" size="25" wrappingWidth="29.0" />
                </graphic>

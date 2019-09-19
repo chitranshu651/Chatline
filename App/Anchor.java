@@ -1,11 +1,10 @@
 package App;
 
 import Login_Signup.User;
-import Misc.Iclose;
-import Misc.MyMessage;
-import Misc.SceneChange;
-import Misc.SessionInfo;
+import Misc.*;
+import VideoCalling.VideoCall1;
 import VideoCalling.VideoCallingService1;
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
 import javafx.collections.FXCollections;
@@ -92,6 +91,11 @@ public class Anchor implements Iclose
     @FXML
     private Circle red;
 
+    @FXML
+    private JFXButton abtn;
+
+    @FXML
+    private JFXButton vbtn;
 
     private User recieved;
     @FXML
@@ -181,10 +185,15 @@ public class Anchor implements Iclose
                 if(Main.user.recieveBoolean()){
                     green.setVisible(true);
                     red.setVisible(false);
+                    abtn.setDisable(false);
+                    vbtn.setDisable(false);
+
                 }
                 else{
                     red.setVisible(true);
                     green.setVisible(false);
+                    abtn.setDisable(true);
+                    vbtn.setDisable(true);
                 }
 
 
@@ -199,7 +208,11 @@ public class Anchor implements Iclose
 
     @FXML
     private void startVideo(ActionEvent event){
-        //TODO Video call
+        Main.user.sendString("StartVideo");
+        Main.user.sendString(recieved.getUsername());
+        IPClass ipClass = (IPClass) Main.user.recieveObject();
+        VideoCall1 videoCall = new VideoCall1(ipClass.getIp(),ipClass.getPort());
+        videoCall.start();
     }
 
     @FXML
