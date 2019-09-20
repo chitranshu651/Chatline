@@ -38,6 +38,8 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
+import AudioCalling.SockMicClient.src.av.Receiver;
+
 public class Anchor implements Iclose
 {
 
@@ -213,6 +215,7 @@ public class Anchor implements Iclose
         IPClass ipClass = (IPClass) Main.user.recieveObject();
         VideoCall1 videoCall = new VideoCall1(ipClass.getIp(),ipClass.getPort());
         videoCall.start();
+        Receiver.RecieverStart(ipClass.getIp());
     }
 
     @FXML

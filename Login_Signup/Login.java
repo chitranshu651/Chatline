@@ -1,5 +1,7 @@
 package Login_Signup;
 
+import AudioCalling.SockMicServer.src.av.Radio;
+import AudioCalling.audioThread;
 import Misc.Iclose;
 import Misc.SceneChange;
 import Misc.SessionInfo;
@@ -15,6 +17,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import sample.Main;
 import VideoCalling.VideoCallingService1;
+
+import javax.sound.sampled.LineUnavailableException;
+import java.io.IOException;
 
 public class Login implements Iclose {
 
@@ -49,7 +54,7 @@ public class Login implements Iclose {
 
 
     @FXML
-    private void Login(ActionEvent click){
+    private void Login(ActionEvent click) throws IOException, LineUnavailableException {
         //Send Data to Server
         String username = user.getText();
         String password = pass.getText();
@@ -65,6 +70,8 @@ public class Login implements Iclose {
             SessionInfo.setUsername(username);
 
             videocalling.start();
+            audioThread at=new audioThread();
+            at.start();
             SessionInfo.setVideocalling(videocalling);
         changer.changeScene("../App/Anchor.fxml", click, "Hi");
         }

@@ -1,5 +1,4 @@
-package av;
-
+package AudioCalling.SockMicClient.src.av;
 import java.io.IOException;
 
 /**
@@ -9,7 +8,7 @@ public class Receiver {
 
     public static void RecieverStart(String ip){
         try{
-            new av.Client(ip).Start();
+            new Client2(ip).Start();
         }
         catch(Exception ex){
             System.out.println("Error in client!!!");

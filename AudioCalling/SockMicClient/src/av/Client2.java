@@ -1,4 +1,4 @@
-package av;
+package AudioCalling.SockMicClient.src.av;
 
 import javax.sound.sampled.*;
 import java.io.IOException;
@@ -8,9 +8,9 @@ import java.net.Socket;
 /**
  * Created by VarunKr on 22-04-2015.
  */
-public class Client {
+public class Client2 {
 
-    public static int PORT = 3000;
+    public static int PORT = 22223;
 
     SourceDataLine _speaker;
     InputStream _streamIn;
@@ -18,7 +18,7 @@ public class Client {
     String _serverName = "127.0.0.1";
     boolean _running = true;
 
-    public Client(String serverName) throws IOException,LineUnavailableException {
+    public Client2(String serverName) throws IOException,LineUnavailableException {
         this._serverName = serverName;
         init();
     }

@@ -1,4 +1,4 @@
-package av;
+package AudioCalling.SockMicServer.src.av;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class Server {
 
     public static final int ERROR_LIMIT = 10;
-    public static final int PORT = 3000;
+    public static final int PORT = 22223;
     public ArrayList<Client> Clients;
     private boolean _running = false;
     private ServerSocket _serverSocket;
