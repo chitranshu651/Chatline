@@ -1,5 +1,6 @@
 package App;
 
+import AudioCalling.audioClientThread;
 import Login_Signup.User;
 import Misc.*;
 import VideoCalling.VideoCall1;
@@ -17,6 +18,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
@@ -115,7 +117,7 @@ public class Anchor implements Iclose
         Main.user.sendString(username);
         User temp= (User)Main.user.recieveObject();
         System.out.println("Object Recieved");
-        Image img = SwingFXUtils.toFXImage(ImageIO.read(temp.getPic()),null);
+        Image img = SwingFXUtils.toFXImage(SessionInfo.BytetoBuff(temp.getImage()),null);
         System.out.println("Image Conversion Error");
         //Setting of User Details in Profile Page
         avatar.setFill(new ImagePattern(img));
@@ -127,6 +129,11 @@ public class Anchor implements Iclose
         updateFriends(username);
         System.out.println("This done");
         email.setText(temp.getEmail());
+        Main.user.sendString("CountRequests");
+        Main.user.sendString(SessionInfo.getUsername());
+        String notification = Main.user.recieveString();
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, notification);
+        alert.showAndWait();
 
     }
 
@@ -153,7 +160,7 @@ public class Anchor implements Iclose
                 Circle cir = new Circle(30);
                 hbox.setSpacing(25);
                 //Image conversion from file format
-                Image img = SwingFXUtils.toFXImage(ImageIO.read(test.getPic()), null);
+                Image img = SwingFXUtils.toFXImage(SessionInfo.BytetoBuff(test.getImage()), null);
                 cir.setFill(new ImagePattern(img));
                 Label lbl = new Label(test.getUsername());
                 lbl.setFont(new Font(15));
@@ -215,13 +222,18 @@ public class Anchor implements Iclose
         IPClass ipClass = (IPClass) Main.user.recieveObject();
         VideoCall1 videoCall = new VideoCall1(ipClass.getIp(),ipClass.getPort());
         videoCall.start();
-        Receiver.RecieverStart(ipClass.getIp());
+        audioClientThread audt = new audioClientThread(ipClass.getIp());
+        audt.start();
+
     }
 
     @FXML
     private void startAudio(ActionEvent event){
         //TODO Audio Call
-
+        Main.user.sendString("StartVideo");
+        Main.user.sendString(recieved.getUsername());
+        IPClass ipClass = (IPClass) Main.user.recieveObject();
+        Receiver.RecieverStart(ipClass.getIp());
     }
 
     @FXML

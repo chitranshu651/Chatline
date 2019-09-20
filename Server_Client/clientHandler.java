@@ -110,6 +110,10 @@ public class clientHandler implements Runnable {
                     case "StartVideo":
                         System.out.println("Start video call");
                          ObjectOutput.writeObject(StartVideo());
+                         break;
+                    case "CountRequests":
+                        System.out.println("Count Requests called");
+                        dataOutput.writeUTF(CountReq());
                 }
             } catch (Exception e) {
                 System.out.println(e);
@@ -126,6 +130,29 @@ public class clientHandler implements Runnable {
         } catch (IOException e) {
             System.out.println(e);
         }
+    }
+
+    private String CountReq() {
+        int m_count=0,v_count=0;
+        try{
+            String user=dataInput.readUTF();
+            String sql1="Select COUNT(UID) as count from notifications where receiver=\""+ user +"\" AND type=\"1\";";
+            Statement stmt=connection.createStatement();
+            ResultSet rs=stmt.executeQuery(sql1);
+            if(rs.next())
+            m_count=rs.getInt("count");
+            String sql2="select COUNT(UID) as count from notifications where receiver=\""+ user +"\" AND type=\"0\";";
+            stmt=connection.createStatement();
+            ResultSet rs1=stmt.executeQuery(sql1);
+            if(rs1.next())
+            v_count=rs1.getInt("count");
+            String ret="You have "+m_count+" new messages and "+v_count+" missed video calls.";
+
+            return ret;
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return "";
     }
 
     private IPClass StartVideo() {
@@ -221,7 +248,7 @@ public class clientHandler implements Runnable {
                 System.out.println(username);
                 user1 = new User(avatar, first, last, email, username, "", "", status);
                 File p = new File(avatar);
-                user1.setPic(p);
+                user1.setImage(BufftoByte(f));
                 suggestions.add(user1);
             }
         } catch(Exception e){
@@ -273,7 +300,8 @@ public class clientHandler implements Runnable {
             String email = dataInput.readUTF();
             String status = dataInput.readUTF();
             Boolean change = ObjectInput.readBoolean();
-            File f = (File) ObjectInput.readObject();
+            byte [] f = (byte []) ObjectInput.readObject();
+            System.out.println(f);
             System.out.println(LocalDateTime.now().toString());
             String filename = username + ".jpg";
             String path = "src/Server_Client/Server_Files/" + filename;
@@ -282,17 +310,19 @@ public class clientHandler implements Runnable {
                  output = new File(path);
                 if (output.createNewFile()) {
                     System.out.println("File Created");
+                    BufferedImage img = BytetoBuff(f);
+                    ImageIO.write(img, "jpg", output);
                 } else {
                     output.delete();
                     output.createNewFile();
+                    BufferedImage img = BytetoBuff(f);
+                    ImageIO.write(img, "jpg", output);
                 }
             }
             else{
-                output = f;
+                output = new File(path);
             }
             System.out.println(output);
-            BufferedImage img = ImageIO.read(f);
-            ImageIO.write(img, "jpg", output);
             String sql = "Update user set First=\"" + first + "\", Last=\"" + last + "\",Email=\"" + email + "\", Avatar=\"" + path + "\", Status=\""+ status + "\" where username=\"" + username + "\";";
             Statement statement = connection.createStatement();
             boolean b = statement.execute(sql);
@@ -354,7 +384,7 @@ public class clientHandler implements Runnable {
                 System.out.println(username);
                 User user1 = new User(avatar, first, last, email, username, "", "", status);
                 File p = new File(avatar);
-                user1.setPic(p);
+                user1.setImage(BufftoByte(p));
                 friends.add(user1);
                 user1 = null;
             }
@@ -385,7 +415,7 @@ public class clientHandler implements Runnable {
                 System.out.println(System.getProperty("user.dir"));
                 f = new File(avatar);
                 System.out.println(f.exists());
-                user1.setPic(f);
+                user1.setImage(BufftoByte(f));
                 System.out.println("Get profile Done");
                 return user1;
             }
@@ -414,7 +444,7 @@ public class clientHandler implements Runnable {
                 String username = rs.getString("Username");
                 String status = rs.getString("Status");
                 User user1 = new User(avatar, first, last, email, username, "", "", status);
-                user1.setPic(new File(avatar));
+                user1.setImage(BufftoByte(new File(avatar)));
                 names.add(user1);
             }
         } catch (IOException | SQLException e) {
@@ -501,16 +531,15 @@ public class clientHandler implements Runnable {
             Statement stmt = connection.createStatement();
             stmt.execute(sql1);
             String receiver_m=message.getReciever();
-            String sql2 = "Select status from Online_Status where user=\'"+receiver_m+"\';";
+            String sql2 = "Select * from Online_Status where Username=\'"+receiver_m+"\';";
             stmt=connection.createStatement();
             ResultSet rs=stmt.executeQuery(sql2);
-            String receiver_t = null;
             while(rs.next()) {
                 flag = true;
             //    receiver_t = rs.getString("status");
             }
             if(flag==false) {
-                String sql3 = "Insert into Notifications VALUES(\"" + receiver_m + "\",1,\"" + message.getSender() + "\");";
+                String sql3 = "Insert into Notifications VALUES(\"" + receiver_m + "\",\"" + message.getSender() + "\",\"1\");";
                 stmt = connection.createStatement();
                 stmt.execute(sql3);
             }
@@ -520,5 +549,32 @@ public class clientHandler implements Runnable {
             e.printStackTrace();
         }
         return false;
+    }
+
+    private byte[] BufftoByte(File f){
+        try {
+            BufferedImage img = ImageIO.read(f);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(img,"jpg",baos);
+            baos.flush();
+            byte [] image =baos.toByteArray();
+            baos.close();
+            return image;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    public static BufferedImage BytetoBuff(byte[] img) {
+        try {
+            ByteArrayInputStream bis = new ByteArrayInputStream(img);
+            BufferedImage image = ImageIO.read(bis);
+            return image;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

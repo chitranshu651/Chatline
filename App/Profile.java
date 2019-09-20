@@ -17,6 +17,9 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import sample.Main;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
@@ -141,11 +144,12 @@ public class Profile implements Iclose {
         file = fileChooser.showOpenDialog((Stage)((Node)(click.getSource())).getScene().getWindow());
         if(!file.exists()){
             //Check for File
-            change=true;
+
             Alert alert = new Alert(Alert.AlertType.ERROR, "File doesn't exist");
             alert.showAndWait();
         }
         else{
+            change=true;
             filename.setText(file.getName());
         }
     }
@@ -168,7 +172,8 @@ public class Profile implements Iclose {
         Main.user.writeBoolean(change);
         try {
             System.out.println("NO error");
-            Main.user.sendObject(file);
+            byte [] image = BufftoByte(file);
+            Main.user.sendObject(image);
             //Check if update successful
 
             boolean check = Main.user.recieveBoolean();
@@ -188,6 +193,22 @@ public class Profile implements Iclose {
             e.printStackTrace();
         }
     }
+
+    private byte[] BufftoByte(File f){
+        try {
+            BufferedImage img = ImageIO.read(f);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(img,"jpg",baos);
+            baos.flush();
+            byte [] image =baos.toByteArray();
+            baos.close();
+            return image;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     //Window Controls
 
