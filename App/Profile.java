@@ -58,7 +58,7 @@ public class Profile implements Iclose {
     @FXML
     private JFXToggleButton tstatus;
 
-    private boolean change =false;
+    private boolean change = false;
 
     private File file;
 
@@ -67,55 +67,51 @@ public class Profile implements Iclose {
     //Functions for Toggle Button State and TextField Enabling
     @FXML
     void eavatar(ActionEvent event) {
-        if(tavatar.isSelected()){
+        if (tavatar.isSelected()) {
             input.setDisable(false);
-        }
-        else{
+        } else {
             input.setDisable(true);
         }
     }
 
     @FXML
     void eemail(ActionEvent event) {
-        if(temail.isSelected()){
+        if (temail.isSelected()) {
             email.setDisable(false);
-        }
-        else{
+        } else {
             email.setDisable(true);
         }
     }
 
     @FXML
     void efname(ActionEvent event) {
-        if(tfirst.isSelected()){
+        if (tfirst.isSelected()) {
             first.setDisable(false);
-        }
-        else{
+        } else {
             first.setDisable(true);
         }
     }
 
     @FXML
     void elname(ActionEvent event) {
-        if(tlast.isSelected()){
+        if (tlast.isSelected()) {
             last.setDisable(false);
-        }
-        else{
+        } else {
             last.setDisable(true);
         }
     }
 
     @FXML
     void estatus(ActionEvent event) {
-        if(tstatus.isSelected()){
+        if (tstatus.isSelected()) {
             statustxt.setDisable(false);
-        }
-        else{
+        } else {
             statustxt.setDisable(true);
         }
     }
+
     @FXML
-    private void initialize(){
+    private void initialize() {
         //Initializing all Textfields as disabled
         first.setDisable(true);
         last.setDisable(true);
@@ -125,7 +121,7 @@ public class Profile implements Iclose {
         //Getting User Data to Update fields
         Main.user.sendString("GetProfile");
         Main.user.sendString(SessionInfo.getUsername());
-        User user =(User) Main.user.recieveObject();
+        User user = (User) Main.user.recieveObject();
         //Setting Data
         first.setText(user.getFirst());
         last.setText(user.getLast());
@@ -135,33 +131,32 @@ public class Profile implements Iclose {
     }
 
     @FXML
-    private void insert(ActionEvent click){
+    private void insert(ActionEvent click) {
         //Uploading New Avatar for User
         FileChooser fileChooser = new FileChooser();
         //Set Filter
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("JPEG Files", "*.jpg"),new FileChooser.ExtensionFilter("PNG Files", "*.png"));
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("JPEG Files", "*.jpg"), new FileChooser.ExtensionFilter("PNG Files", "*.png"));
         //Get file
-        file = fileChooser.showOpenDialog((Stage)((Node)(click.getSource())).getScene().getWindow());
-        if(!file.exists()){
+        file = fileChooser.showOpenDialog((Stage) ((Node) (click.getSource())).getScene().getWindow());
+        if (!file.exists()) {
             //Check for File
 
             Alert alert = new Alert(Alert.AlertType.ERROR, "File doesn't exist");
             alert.showAndWait();
-        }
-        else{
-            change=true;
+        } else {
+            change = true;
             filename.setText(file.getName());
         }
     }
 
     @FXML
-    private void back(ActionEvent click){
+    private void back(ActionEvent click) {
         changer.changeScene("../App/Anchor.fxml", click, "Home");
     }
 
     //Update Profile Action
     @FXML
-    private void update(ActionEvent click){
+    private void update(ActionEvent click) {
         //Sending Data to be updated with User Details
         Main.user.sendString("UpdateProfile");
         Main.user.sendString(SessionInfo.getUsername());
@@ -170,37 +165,37 @@ public class Profile implements Iclose {
         Main.user.sendString(email.getText());
         Main.user.sendString(statustxt.getText());
         Main.user.writeBoolean(change);
+        byte[] image = new byte[5];
         try {
             System.out.println("NO error");
-            byte [] image = BufftoByte(file);
+            if (change)
+                image = BufftoByte(file);
             Main.user.sendObject(image);
             //Check if update successful
 
             boolean check = Main.user.recieveBoolean();
             System.out.println("Waiting over");
-            if(check) {
+            if (check) {
                 //Show success alert
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION,"Profile update successful");
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Profile update successful");
                 changer.changeScene("../App/Anchor.fxml", click, "Home");
-            }
-            else {
+            } else {
                 //Show Failure Alert
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Check your details");
                 alert.showAndWait();
             }
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private byte[] BufftoByte(File f){
+    private byte[] BufftoByte(File f) {
         try {
             BufferedImage img = ImageIO.read(f);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(img,"jpg",baos);
+            ImageIO.write(img, "jpg", baos);
             baos.flush();
-            byte [] image =baos.toByteArray();
+            byte[] image = baos.toByteArray();
             baos.close();
             return image;
         } catch (IOException e) {
@@ -212,12 +207,12 @@ public class Profile implements Iclose {
 
     //Window Controls
 
-    public void close(MouseEvent click){
+    public void close(MouseEvent click) {
         Stage window = (Stage) ((Node) click.getSource()).getScene().getWindow();
         window.close();
     }
 
-    public void minimize(MouseEvent click){
+    public void minimize(MouseEvent click) {
         Stage window = (Stage) ((Node) click.getSource()).getScene().getWindow();
         window.toBack();
     }

@@ -19,9 +19,6 @@ import sample.Main;
 import java.io.IOException;
 import java.security.spec.InvalidKeySpecException;
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 
 public class Signup implements Iclose {
 
@@ -108,11 +105,10 @@ public class Signup implements Iclose {
     }
 
     @FXML
-    private void checkpasses(){
-        if(confirm.getText().equals(pass.getText())){
+    private void checkpasses() {
+        if (confirm.getText().equals(pass.getText())) {
             status2.setText("Match");
-        }
-        else{
+        } else {
             status2.setText("NO Match");
         }
     }
@@ -121,31 +117,29 @@ public class Signup implements Iclose {
     @FXML
     private void signup(ActionEvent click) throws InvalidKeySpecException, IOException {
         if (confirm.getText().equals(pass.getText()) && checkuser()) {
-                PasswordUtils passgen = new PasswordUtils();
-                String salt = passgen.getSalt(30);
-                String hashed = passgen.generateSecurePassword(pass.getText(), salt);
-                register = new User(" ",first.getText(), last.getText(), email.getText(), user.getText(),hashed ,salt,"Available" );
-                Main.user.sendString("Signup");
-                Main.user.sendObject(register);
-                boolean check = Main.user.recieveBoolean();
-                if(check){
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Success");
-                    alert.setHeaderText("Success");
-                    alert.setContentText("You have been registered");
-                    alert.showAndWait();
-                    changer.changeScene("../Login_Signup/Login.fxml", click, "Login");
-                }
-                else{
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Failure");
-                    alert.setHeaderText("Failure");
-                    alert.setContentText("Registration Failed");
-                    alert.showAndWait();
-                }
-
+            PasswordUtils passgen = new PasswordUtils();
+            String salt = passgen.getSalt(30);
+            String hashed = passgen.generateSecurePassword(pass.getText(), salt);
+            register = new User(" ", first.getText(), last.getText(), email.getText(), user.getText(), hashed, salt, "Available");
+            Main.user.sendString("Signup");
+            Main.user.sendObject(register);
+            boolean check = Main.user.recieveBoolean();
+            if (check) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Success");
+                alert.setHeaderText("Success");
+                alert.setContentText("You have been registered");
+                alert.showAndWait();
+                changer.changeScene("../Login_Signup/Login.fxml", click, "Login");
+            } else {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Failure");
+                alert.setHeaderText("Failure");
+                alert.setContentText("Registration Failed");
+                alert.showAndWait();
             }
-            else{
+
+        } else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Password Mismatch");
             alert.setHeaderText("Error:");
@@ -155,33 +149,27 @@ public class Signup implements Iclose {
     }
 
     private boolean checkuser() {
-        try {
-            String sql = "SELECT COUNT(Username) as count FROM user WHERE Username =  '" + user.getText() + "' ;";
-            Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(sql);
-            while (rs.next()) {
-                return rs.getInt(1) == 0;
-            }
-        }
-        catch (SQLException e) {
-            System.out.println(e);
+        Main.user.sendString("CheckUser");
+        Main.user.sendString(user.getText());
+        if (Main.user.recieveBoolean()) {
+            return true;
         }
         return false;
     }
 
 
     @FXML
-    private void login(MouseEvent click){
-        changer.changeScene("../Login_Signup/Login.fxml",click,"Welcome To Chatline");
+    private void login(MouseEvent click) {
+        changer.changeScene("../Login_Signup/Login.fxml", click, "Welcome To Chatline");
     }
 
     //Window Controls
-    public void close(MouseEvent click){
+    public void close(MouseEvent click) {
         Stage window = (Stage) ((Node) click.getSource()).getScene().getWindow();
         window.close();
     }
 
-    public void minimize(MouseEvent click){
+    public void minimize(MouseEvent click) {
         Stage window = (Stage) ((Node) click.getSource()).getScene().getWindow();
         window.toBack();
     }

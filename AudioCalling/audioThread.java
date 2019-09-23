@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class audioThread extends Thread {
 
-    public void run(){
+    public void run() {
         try {
             new Radio();
         } catch (IOException e) {

@@ -53,8 +53,7 @@ public class PasswordUtils {
 
     //Used to verify if the password entered is the same as the one stored
     public boolean verifyUserPassword(String providedPassword,
-                                      String securedPassword, String salt) throws InvalidKeySpecException
-    {
+                                      String securedPassword, String salt) throws InvalidKeySpecException {
         boolean returnValue = false;
 
         // Generate New secure password with the same salt

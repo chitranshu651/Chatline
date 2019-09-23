@@ -4,25 +4,20 @@ import AudioCalling.audioClientThread;
 import Login_Signup.User;
 import Misc.*;
 import VideoCalling.VideoCall1;
-import VideoCalling.VideoCallingService1;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -30,20 +25,14 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
-import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import sample.Main;
 
-import javax.imageio.ImageIO;
-import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
-import AudioCalling.SockMicClient.src.av.Receiver;
-
-public class Anchor implements Iclose
-{
+public class Anchor implements Iclose {
 
     @FXML
     private Label first;
@@ -66,7 +55,7 @@ public class Anchor implements Iclose
     @FXML
     private Label email;
 
-    private SceneChange changer =new SceneChange();
+    private SceneChange changer = new SceneChange();
 
     @FXML
     private Pane proflie;
@@ -75,7 +64,7 @@ public class Anchor implements Iclose
     private Pane chat;
 
     @FXML
-    private TextFlow messageloader;
+    private JFXListView messageloader;
 
     @FXML
     private JFXTextField usermessage;
@@ -102,9 +91,10 @@ public class Anchor implements Iclose
     private JFXButton vbtn;
 
     private User recieved;
+
     @FXML
-    private void addFriend(ActionEvent click){
-        changer.changeScene("../App/addFriend.fxml",click,"Add Friend");
+    private void addFriend(ActionEvent click) {
+        changer.changeScene("../App/addFriend.fxml", click, "Add Friend");
     }
 
     public void initialize() throws IOException {
@@ -115,9 +105,9 @@ public class Anchor implements Iclose
         System.out.println("Up until here");
         Main.user.sendString("GetProfile");
         Main.user.sendString(username);
-        User temp= (User)Main.user.recieveObject();
+        User temp = (User) Main.user.recieveObject();
         System.out.println("Object Recieved");
-        Image img = SwingFXUtils.toFXImage(SessionInfo.BytetoBuff(temp.getImage()),null);
+        Image img = SwingFXUtils.toFXImage(SessionInfo.BytetoBuff(temp.getImage()), null);
         System.out.println("Image Conversion Error");
         //Setting of User Details in Profile Page
         avatar.setFill(new ImagePattern(img));
@@ -134,12 +124,13 @@ public class Anchor implements Iclose
         String notification = Main.user.recieveString();
         Alert alert = new Alert(Alert.AlertType.INFORMATION, notification);
         alert.showAndWait();
+        // refresh();
 
     }
 
     @FXML
-    private void editprofile(ActionEvent click){
-        changer.changeScene("../App/Profile.fxml",click,"Edit Profile");
+    private void editprofile(ActionEvent click) {
+        changer.changeScene("../App/Profile.fxml", click, "Edit Profile");
     }
 
 
@@ -149,11 +140,11 @@ public class Anchor implements Iclose
         Main.user.sendString("GetFriends");
         Main.user.sendString(username);
         //Recieve List of Friends
-        ArrayList<User> friends=(ArrayList<User>) Main.user.recieveObject();
+        ArrayList<User> friends = (ArrayList<User>) Main.user.recieveObject();
         friend.setItems(FXCollections.observableArrayList(friends));
         ArrayList a = new ArrayList();
         //Creating Custom List View for Displaying Friends
-        if(friends.size()!=0) {
+        if (friends.size() != 0) {
             for (User test : friends) {
                 HBox hbox = new HBox();
                 hbox.setPadding(new Insets(10, 10, 10, 10));
@@ -176,34 +167,35 @@ public class Anchor implements Iclose
         friend.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-               proflie.setVisible(false);
-               chat.setVisible(true);
-               String tosend = ((Label) ((VBox) ((HBox) (friend.getSelectionModel().getSelectedItem())).getChildren().get(1)).getChildren().get(0)).getText();
-               Main.user.sendString("GetProfile");
-               Main.user.sendString(tosend);
-               recieved = (User)Main.user.recieveObject();
-               chatname.setText(recieved.getFirst() + " " + recieved.getLast());
-               chatstatus.setText(recieved.getStatus());
+                proflie.setVisible(false);
+                chat.setVisible(true);
+                String tosend = ((Label) ((VBox) ((HBox) (friend.getSelectionModel().getSelectedItem())).getChildren().get(1)).getChildren().get(0)).getText();
+                Main.user.sendString("GetProfile");
+                Main.user.sendString(tosend);
+                recieved = (User) Main.user.recieveObject();
+                chatname.setText(recieved.getFirst() + " " + recieved.getLast());
+                chatstatus.setText(recieved.getStatus());
                 try {
-                    chatavatar.setFill(new ImagePattern(SwingFXUtils.toFXImage(ImageIO.read(recieved.getPic()),null)));
-                } catch (IOException e) {
+                    chatavatar.setFill(new ImagePattern(SwingFXUtils.toFXImage(SessionInfo.BytetoBuff(recieved.getImage()), null)));
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 Main.user.sendString("CheckOnline");
                 Main.user.sendString(tosend);
-                if(Main.user.recieveBoolean()){
+                if (Main.user.recieveBoolean()) {
                     green.setVisible(true);
                     red.setVisible(false);
                     abtn.setDisable(false);
                     vbtn.setDisable(false);
 
-                }
-                else{
+                } else {
                     red.setVisible(true);
                     green.setVisible(false);
                     abtn.setDisable(true);
                     vbtn.setDisable(true);
+
                 }
+                refresh1();
 
 
             }
@@ -211,16 +203,16 @@ public class Anchor implements Iclose
     }
 
     @FXML
-    private void request(ActionEvent event){
-        changer.changeScene("../App/Request.fxml",event, "See Requests");
+    private void request(ActionEvent event) {
+        changer.changeScene("../App/Request.fxml", event, "See Requests");
     }
 
     @FXML
-    private void startVideo(ActionEvent event){
+    private void startVideo(ActionEvent event) {
         Main.user.sendString("StartVideo");
         Main.user.sendString(recieved.getUsername());
         IPClass ipClass = (IPClass) Main.user.recieveObject();
-        VideoCall1 videoCall = new VideoCall1(ipClass.getIp(),ipClass.getPort());
+        VideoCall1 videoCall = new VideoCall1(ipClass.getIp(), ipClass.getPort());
         videoCall.start();
         audioClientThread audt = new audioClientThread(ipClass.getIp());
         audt.start();
@@ -228,16 +220,17 @@ public class Anchor implements Iclose
     }
 
     @FXML
-    private void startAudio(ActionEvent event){
+    private void startAudio(ActionEvent event) {
         //TODO Audio Call
         Main.user.sendString("StartVideo");
         Main.user.sendString(recieved.getUsername());
         IPClass ipClass = (IPClass) Main.user.recieveObject();
-        Receiver.RecieverStart(ipClass.getIp());
+        audioClientThread audt = new audioClientThread(ipClass.getIp());
+        audt.start();
     }
 
     @FXML
-    private void send(ActionEvent event){
+    private void send(ActionEvent event) {
         MyMessage message = new MyMessage();
         message.setSender(SessionInfo.getUsername());
         message.setReciever(recieved.getUsername());
@@ -252,13 +245,13 @@ public class Anchor implements Iclose
     }
 
     @FXML
-    private void home(ActionEvent click){
+    private void home(ActionEvent click) {
         proflie.setVisible(true);
         chat.setVisible(false);
     }
 
     //Window Controls
-    public void close(MouseEvent click){
+    public void close(MouseEvent click) {
         /*VideoCallingService1 video = SessionInfo.getVideocalling();
         video.exit=true;
         */
@@ -268,9 +261,37 @@ public class Anchor implements Iclose
 
     }
 
-    public void minimize(MouseEvent click){
+    public void minimize(MouseEvent click) {
         Stage window = (Stage) ((Node) click.getSource()).getScene().getWindow();
         window.toBack();
+    }
+
+
+    private void refresh1() {
+        Main.user.sendString("GetMessages");
+        Main.user.sendString(SessionInfo.getUsername());
+        Main.user.sendString(recieved.getUsername());
+        ArrayList<MyMessage> messages = (ArrayList) Main.user.recieveObject();
+        ArrayList<String> todisplay = new ArrayList<>();
+        for (MyMessage ms : messages) {
+            String text = "[" + ms.getTime() + "] " + ms.getSender() + " : " + ms.getMessage();
+            todisplay.add(text);
+        }
+        messageloader.setItems(FXCollections.observableArrayList(todisplay));
+    }
+
+    @FXML
+    private void refresh(ActionEvent event) {
+        Main.user.sendString("GetMessages");
+        Main.user.sendString(SessionInfo.getUsername());
+        Main.user.sendString(recieved.getUsername());
+        ArrayList<MyMessage> messages = (ArrayList) Main.user.recieveObject();
+        ArrayList<String> todisplay = new ArrayList<>();
+        for (MyMessage ms : messages) {
+            String text = "[" + ms.getTime() + "] " + ms.getSender() + " : " + ms.getMessage();
+            todisplay.add(text);
+        }
+        messageloader.setItems(FXCollections.observableArrayList(todisplay));
     }
 
 }

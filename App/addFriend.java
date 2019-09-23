@@ -27,8 +27,6 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import sample.Main;
 
-import javax.imageio.ImageIO;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class addFriend implements Iclose {
@@ -69,7 +67,7 @@ public class addFriend implements Iclose {
 
     private SceneChange changer = new SceneChange();
 
-    public void initialize(){
+    public void initialize() {
         intro.setVisible(true);
         profile.setVisible(false);
         ArrayList a = new ArrayList();
@@ -95,15 +93,14 @@ public class addFriend implements Iclose {
                 Main.user.sendString("CheckFriend");
                 Main.user.sendString(SessionInfo.getUsername());
                 Main.user.sendString(temp);
-                if(Main.user.recieveBoolean()){
+                if (Main.user.recieveBoolean()) {
                     add.setDisable(true);
-                }
-                else{
+                } else {
                     add.setDisable(false);
                 }
                 try {
-                    avatar.setFill(new ImagePattern(SwingFXUtils.toFXImage(ImageIO.read(recieved.getPic()), null)));
-                } catch (IOException e) {
+                    avatar.setFill(new ImagePattern(SwingFXUtils.toFXImage(SessionInfo.BytetoBuff(recieved.getImage()), null)));
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -119,8 +116,8 @@ public class addFriend implements Iclose {
             //Image conversion from file format
             Image img = null;
             try {
-                img = SwingFXUtils.toFXImage(ImageIO.read(test.getPic()), null);
-            } catch (IOException e) {
+                img = SwingFXUtils.toFXImage(SessionInfo.BytetoBuff(test.getImage()), null);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             cir.setFill(new ImagePattern(img));
@@ -154,37 +151,36 @@ public class addFriend implements Iclose {
     }
 
     @FXML
-    private void addFriend(ActionEvent event){
+    private void addFriend(ActionEvent event) {
         Main.user.sendString("FriendReq");
         Main.user.sendString(SessionInfo.getUsername());
         Main.user.sendString(username.getText());
         boolean check = Main.user.recieveBoolean();
-        if(check){
-            Alert alert = new Alert(Alert.AlertType.INFORMATION,"Success");
+        if (check) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Success");
             alert.showAndWait();
             search.setText("");
             profile.setVisible(false);
             intro.setVisible(true);
-        }
-        else{
-            Alert alert =new Alert(Alert.AlertType.ERROR,"An Unexpected Error Occurred");
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "An Unexpected Error Occurred");
             alert.showAndWait();
         }
     }
 
 
     @FXML
-    private void goBack(ActionEvent event){
-        changer.changeScene("../App/Anchor.fxml",event, "Home");
+    private void goBack(ActionEvent event) {
+        changer.changeScene("../App/Anchor.fxml", event, "Home");
     }
 
 
-    public void close(MouseEvent click){
+    public void close(MouseEvent click) {
         Stage window = (Stage) ((Node) click.getSource()).getScene().getWindow();
         window.close();
     }
 
-    public void minimize(MouseEvent click){
+    public void minimize(MouseEvent click) {
         Stage window = (Stage) ((Node) click.getSource()).getScene().getWindow();
         window.toBack();
     }

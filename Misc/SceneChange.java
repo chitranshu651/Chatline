@@ -32,7 +32,7 @@ public class SceneChange {
     public void changeScene(String Filename, ActionEvent click, String Title, int width, int height) {
         try {
             Parent parent = FXMLLoader.load(getClass().getResource(Filename));
-            Scene scene = new Scene(parent,width,height);
+            Scene scene = new Scene(parent, width, height);
 
             Stage window = (Stage) ((Node) click.getSource()).getScene().getWindow();
             window.setTitle(Title);

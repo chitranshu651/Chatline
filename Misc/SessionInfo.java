@@ -10,6 +10,26 @@ import java.io.IOException;
 
 public class SessionInfo {
 
+    private static int AudioPort;
+
+    private static int VideoPort;
+
+    public static int getAudioPort() {
+        return AudioPort;
+    }
+
+    public static void setAudioPort(int audioPort) {
+        AudioPort = audioPort;
+    }
+
+    public static int getVideoPort() {
+        return VideoPort;
+    }
+
+    public static void setVideoPort(int videoPort) {
+        VideoPort = videoPort;
+    }
+
     private static String username;
 
     private static VideoCallingService1 videocalling;

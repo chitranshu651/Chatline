@@ -1,7 +1,5 @@
-package AudioCalling.SockMicServer.src.av;
+package AudioCalling.AudioServer;
 
-
-import AudioCalling.SockMicServer.src.av.Server;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
@@ -33,7 +31,6 @@ public class Radio {
             e.printStackTrace();
         }
     }
-
 
 
     private void initMic() throws LineUnavailableException {
@@ -74,6 +71,7 @@ public class Radio {
             System.out.println("Error!!!");
             e.printStackTrace();
         }
-    }   }
+    }
+}
 
 

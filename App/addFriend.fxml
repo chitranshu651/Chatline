@@ -4,77 +4,85 @@
 <?import com.jfoenix.controls.JFXListView?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
-
-<AnchorPane prefHeight="634.0" prefWidth="1050.0" style="-fx-background-color: #2A363F;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.addFriend">
+<AnchorPane prefHeight="634.0" prefWidth="1050.0" style="-fx-background-color: #2A363F;"
+            xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.addFriend">
     <children>
         <HBox alignment="TOP_RIGHT" layoutX="908.0" layoutY="14.0" prefHeight="35.0" prefWidth="128.0" spacing="20.0">
             <children>
-                <Circle fill="#d7eb00" onMouseClicked="#minimize" radius="9.0" stroke="BLACK" strokeType="INSIDE" />
-                <Circle fill="#ee0000" onMouseClicked="#close" radius="9.0" stroke="BLACK" strokeType="INSIDE" />
+                <Circle fill="#d7eb00" onMouseClicked="#minimize" radius="9.0" stroke="BLACK" strokeType="INSIDE"/>
+                <Circle fill="#ee0000" onMouseClicked="#close" radius="9.0" stroke="BLACK" strokeType="INSIDE"/>
             </children>
         </HBox>
         <AnchorPane layoutY="111.0" prefHeight="556.0" prefWidth="337.0" style="-fx-background-color: #4c6185;">
             <children>
-                <JFXListView fx:id="friend" layoutX="14.0" layoutY="-7.0" prefHeight="556.0" prefWidth="337.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-            <Line endX="-154.0" endY="-127.0" layoutX="488.0" layoutY="98.0" startX="-151.0" startY="458.0" />
+                <JFXListView fx:id="friend" layoutX="14.0" layoutY="-7.0" prefHeight="556.0" prefWidth="337.0"
+                             style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0"
+                             AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+                <Line endX="-154.0" endY="-127.0" layoutX="488.0" layoutY="98.0" startX="-151.0" startY="458.0"/>
             </children>
         </AnchorPane>
         <AnchorPane layoutX="-6.0" prefHeight="119.0" prefWidth="345.0" style="-fx-background-color: #1bf2b9;">
             <children>
-            <JFXTextField fx:id="search" focusColor="BLACK" labelFloat="true" layoutX="54.0" layoutY="74.0" onKeyReleased="#updateSearch" prefHeight="31.0" prefWidth="237.0" promptText="Search" style="-fx-background-color: white;" unFocusColor="BLACK" />
-            <JFXButton layoutX="14.0" layoutY="14.0" onAction="#goBack" text=" ">
-               <graphic>
-                  <FontAwesomeIconView glyphName="ARROW_LEFT" size="40" wrappingWidth="72.28571319580078" />
-               </graphic>
-            </JFXButton>
+                <JFXTextField fx:id="search" focusColor="BLACK" labelFloat="true" layoutX="54.0" layoutY="74.0"
+                              onKeyReleased="#updateSearch" prefHeight="31.0" prefWidth="237.0" promptText="Search"
+                              style="-fx-background-color: white;" unFocusColor="BLACK"/>
+                <JFXButton layoutX="14.0" layoutY="14.0" onAction="#goBack" text=" ">
+                    <graphic>
+                        <FontAwesomeIconView glyphName="ARROW_LEFT" size="40" wrappingWidth="72.28571319580078"/>
+                    </graphic>
+                </JFXButton>
             </children>
         </AnchorPane>
-      <Pane fx:id="profile" layoutX="337.0" layoutY="49.0">
-         <children>
-            <AnchorPane prefHeight="616.0" prefWidth="716.0" style="-fx-background-color: white;">
-               <children>
-                  <Circle fx:id="avatar" fill="DODGERBLUE" layoutX="316.0" layoutY="163.0" radius="75.0" stroke="BLACK" strokeType="INSIDE" />
-                  <JFXButton fx:id="add" buttonType="RAISED" layoutX="600.0" layoutY="26.0" onAction="#addFriend" style="-fx-background-color: #1bf2b9;" text="Add">
-                     <graphic>
-                        <FontAwesomeIconView glyphName="USER_PLUS" size="20" />
-                     </graphic>
-                  </JFXButton>
-                  <Label fx:id="name" layoutX="419.0" layoutY="326.0" text="Label" />
-                  <Label layoutX="154.0" layoutY="392.0" text="Username" />
-                  <Label fx:id="status" layoutX="274.0" layoutY="261.0" prefHeight="31.0" prefWidth="85.0" text="Label" />
-                  <Label layoutX="156.0" layoutY="336.0" text="Name" />
-                  <Label fx:id="username" layoutX="419.0" layoutY="400.0" text="Label" />
-                  <Label layoutX="154.0" layoutY="463.0" text="Email" />
-                  <Label fx:id="email" layoutX="416.0" layoutY="474.0" text="Label" />
-               </children>
-            </AnchorPane>
-         </children>
-      </Pane>
-      <Pane fx:id="intro" layoutX="337.0" layoutY="49.0" visible="false">
-         <children>
-            <AnchorPane prefHeight="616.0" prefWidth="716.0" style="-fx-background-color: white;">
-               <children>
-                  <Label layoutX="176.0" layoutY="72.0" prefHeight="166.0" prefWidth="383.0" text="Welcome To ChatLine ">
-                     <font>
-                        <Font name="System Bold" size="36.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="TOP_CENTER" layoutX="167.0" layoutY="213.0" prefHeight="64.0" prefWidth="383.0" text="Friend Search" textAlignment="CENTER">
-                     <font>
-                        <Font name="System Bold" size="36.0" />
-                     </font>
-                  </Label>
-                  <FontAwesomeIconView glyphName="HEART" layoutX="335.0" layoutY="368.0" size="70" style="-fx-fill: red;" />
-               </children>
-            </AnchorPane>
-         </children>
-      </Pane>
+        <Pane fx:id="profile" layoutX="337.0" layoutY="49.0">
+            <children>
+                <AnchorPane prefHeight="616.0" prefWidth="716.0" style="-fx-background-color: white;">
+                    <children>
+                        <Circle fx:id="avatar" fill="DODGERBLUE" layoutX="316.0" layoutY="163.0" radius="75.0"
+                                stroke="BLACK" strokeType="INSIDE"/>
+                        <JFXButton fx:id="add" buttonType="RAISED" layoutX="600.0" layoutY="26.0" onAction="#addFriend"
+                                   style="-fx-background-color: #1bf2b9;" text="Add">
+                            <graphic>
+                                <FontAwesomeIconView glyphName="USER_PLUS" size="20"/>
+                            </graphic>
+                        </JFXButton>
+                        <Label fx:id="name" layoutX="419.0" layoutY="326.0" text="Label"/>
+                        <Label layoutX="154.0" layoutY="392.0" text="Username"/>
+                        <Label fx:id="status" layoutX="274.0" layoutY="261.0" prefHeight="31.0" prefWidth="85.0"
+                               text="Label"/>
+                        <Label layoutX="156.0" layoutY="336.0" text="Name"/>
+                        <Label fx:id="username" layoutX="419.0" layoutY="400.0" text="Label"/>
+                        <Label layoutX="154.0" layoutY="463.0" text="Email"/>
+                        <Label fx:id="email" layoutX="416.0" layoutY="474.0" text="Label"/>
+                    </children>
+                </AnchorPane>
+            </children>
+        </Pane>
+        <Pane fx:id="intro" layoutX="337.0" layoutY="49.0" visible="false">
+            <children>
+                <AnchorPane prefHeight="616.0" prefWidth="716.0" style="-fx-background-color: white;">
+                    <children>
+                        <Label layoutX="176.0" layoutY="72.0" prefHeight="166.0" prefWidth="383.0"
+                               text="Welcome To ChatLine ">
+                            <font>
+                                <Font name="System Bold" size="36.0"/>
+                            </font>
+                        </Label>
+                        <Label alignment="TOP_CENTER" layoutX="167.0" layoutY="213.0" prefHeight="64.0"
+                               prefWidth="383.0" text="Friend Search" textAlignment="CENTER">
+                            <font>
+                                <Font name="System Bold" size="36.0"/>
+                            </font>
+                        </Label>
+                        <FontAwesomeIconView glyphName="HEART" layoutX="335.0" layoutY="368.0" size="70"
+                                             style="-fx-fill: red;"/>
+                    </children>
+                </AnchorPane>
+            </children>
+        </Pane>
     </children>
 </AnchorPane>

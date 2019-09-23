@@ -5,7 +5,6 @@ import Misc.Iclose;
 import Misc.SceneChange;
 import Misc.SessionInfo;
 import com.jfoenix.controls.JFXListView;
-import com.jfoenix.controls.JFXTextField;
 import javafx.collections.FXCollections;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
@@ -26,8 +25,6 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import sample.Main;
 
-import javax.imageio.ImageIO;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class Request implements Iclose {
@@ -62,22 +59,22 @@ public class Request implements Iclose {
 
     private SceneChange changer = new SceneChange();
 
-    public void initialize(){
+    public void initialize() {
         try {
             ArrayList a = new ArrayList();
             intro.setVisible(true);
             profile.setVisible(false);
             Main.user.sendString("GetRequest");
             Main.user.sendString(SessionInfo.getUsername());
-            ArrayList<User> requests =(ArrayList)Main.user.recieveObject();
-            if(requests.size()!=0) {
+            ArrayList<User> requests = (ArrayList) Main.user.recieveObject();
+            if (requests.size() != 0) {
                 for (User test : requests) {
                     HBox hbox = new HBox();
                     hbox.setPadding(new Insets(10, 10, 10, 10));
                     Circle cir = new Circle(30);
                     hbox.setSpacing(25);
                     //Image conversion from file format
-                    Image img = SwingFXUtils.toFXImage(ImageIO.read(test.getPic()), null);
+                    Image img = SwingFXUtils.toFXImage(SessionInfo.BytetoBuff(test.getImage()), null);
                     cir.setFill(new ImagePattern(img));
                     Label lbl = new Label(test.getUsername());
                     lbl.setFont(new Font(15));
@@ -103,44 +100,45 @@ public class Request implements Iclose {
                         email.setText(recieved.getEmail());
                         username.setText(recieved.getUsername());
                         try {
-                            avatar.setFill(new ImagePattern(SwingFXUtils.toFXImage(ImageIO.read(recieved.getPic()), null)));
-                        } catch (IOException e) {
+                            avatar.setFill(new ImagePattern(SwingFXUtils.toFXImage(SessionInfo.BytetoBuff(recieved.getImage()), null)));
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
                 });
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
 
     @FXML
-    private void addFriend(ActionEvent event){
+    private void addFriend(ActionEvent event) {
         Main.user.sendString("ReqAccept");
         Main.user.sendString(SessionInfo.getUsername());
         Main.user.sendString(username.getText());
         boolean check = Main.user.recieveBoolean();
-        if(check){
+        if (check) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Friend Added Successfully");
             alert.showAndWait();
-        }
-        else{
+        } else {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Error Occurred");
             alert.showAndWait();
         }
     }
+
     @FXML
-    private void goBack(ActionEvent event){
-        changer.changeScene("../App/Anchor.fxml",event, "Home");
+    private void goBack(ActionEvent event) {
+        changer.changeScene("../App/Anchor.fxml", event, "Home");
     }
-    public void close(MouseEvent click){
+
+    public void close(MouseEvent click) {
         Stage window = (Stage) ((Node) click.getSource()).getScene().getWindow();
         window.close();
     }
 
-    public void minimize(MouseEvent click){
+    public void minimize(MouseEvent click) {
         Stage window = (Stage) ((Node) click.getSource()).getScene().getWindow();
         window.toBack();
     }

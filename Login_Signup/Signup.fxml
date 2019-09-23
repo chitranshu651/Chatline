@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXPasswordField?>
-<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -12,45 +10,60 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
-
-<AnchorPane fx:id="anchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="600.0" style="-fx-background-color: #2A363F;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Login_Signup.Signup">
-   <children>
-      <VBox layoutX="72.0" layoutY="145.0" prefHeight="424.0" prefWidth="439.0" spacing="50.0">
-         <children>
-            <JFXTextField fx:id="first" focusColor="#fdfdff" labelFloat="true" prefHeight="50.0" prefWidth="385.0" promptText="First Name" style="-fx-background-color: white;" />
-            <JFXTextField fx:id="last" focusColor="#fbfcff" labelFloat="true" prefHeight="50.0" prefWidth="385.0" promptText="Last Name" style="-fx-background-color: white;" />
-            <JFXTextField fx:id="email" focusColor="#f7f8fc" labelFloat="true" prefHeight="50.0" prefWidth="385.0" promptText="Email" style="-fx-background-color: white;" />
-            <JFXTextField fx:id="user" focusColor="#fdfdff" labelFloat="true" onKeyReleased="#labelupdate" prefHeight="50.0" prefWidth="385.0" promptText="Username" style="-fx-background-color: white;" />
-            <JFXPasswordField fx:id="pass" focusColor="WHITE" labelFloat="true" onKeyReleased="#checkpasses" prefHeight="50.0" prefWidth="385.0" promptText="Password" style="-fx-background-color: white;" />
-            <JFXPasswordField fx:id="confirm" focusColor="WHITE" labelFloat="true" onKeyReleased="#checkpasses" prefHeight="50.0" prefWidth="385.0" promptText="Confirm Password" style="-fx-background-color: white;" />
-         </children>
-         <padding>
-            <Insets top="25.0" />
-         </padding>
-      </VBox>
-      <Label contentDisplay="CENTER" layoutX="163.0" layoutY="72.0" prefHeight="63.0" prefWidth="395.0" text="Welcome New User" textAlignment="CENTER" textFill="#fcf5f5">
-         <font>
-            <Font name="Monotype Corsiva" size="35.0" />
-         </font>
-      </Label>
-      <JFXButton layoutX="224.0" layoutY="666.0" onAction="#signup" prefHeight="50.0" prefWidth="136.0" style="-fx-background-color: #00f5a7;" text="Signup">
-         <ripplerFill>
-            <LinearGradient endX="0.558252427184466" endY="1.0" startX="0.49514563106796117">
-               <stops>
-                  <Stop color="#1776eb" />
-                  <Stop color="WHITE" offset="1.0" />
-               </stops>
-            </LinearGradient>
-         </ripplerFill>
-      </JFXButton>
-      <Label fx:id="status" disable="true" layoutX="526.0" layoutY="422.0" prefHeight="21.0" prefWidth="50.0" textFill="#f2f0f0" />
-      <Label fx:id="status2" disable="true" layoutX="534.0" layoutY="585.0" prefHeight="21.0" prefWidth="50.0" />
-      <HBox alignment="TOP_RIGHT" layoutX="462.0" layoutY="14.0" prefHeight="35.0" prefWidth="128.0" spacing="20.0">
-         <children>
-            <Circle fill="#d7eb00" onMouseClicked="#minimize" radius="9.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fill="#ee0000" onMouseClicked="#close" radius="9.0" stroke="BLACK" strokeType="INSIDE" />
-         </children>
-      </HBox>
-      <Label layoutX="214.0" layoutY="740.0" onMouseClicked="#login" text="Already Registered? Login" textFill="WHITE" />
-   </children>
+<AnchorPane fx:id="anchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="800.0" prefWidth="600.0" style="-fx-background-color: #2A363F;"
+            xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Login_Signup.Signup">
+    <children>
+        <VBox layoutX="72.0" layoutY="145.0" prefHeight="424.0" prefWidth="439.0" spacing="50.0">
+            <children>
+                <JFXTextField fx:id="first" focusColor="#fdfdff" labelFloat="true" prefHeight="50.0" prefWidth="385.0"
+                              promptText="First Name" style="-fx-background-color: white;"/>
+                <JFXTextField fx:id="last" focusColor="#fbfcff" labelFloat="true" prefHeight="50.0" prefWidth="385.0"
+                              promptText="Last Name" style="-fx-background-color: white;"/>
+                <JFXTextField fx:id="email" focusColor="#f7f8fc" labelFloat="true" prefHeight="50.0" prefWidth="385.0"
+                              promptText="Email" style="-fx-background-color: white;"/>
+                <JFXTextField fx:id="user" focusColor="#fdfdff" labelFloat="true" onKeyReleased="#labelupdate"
+                              prefHeight="50.0" prefWidth="385.0" promptText="Username"
+                              style="-fx-background-color: white;"/>
+                <JFXPasswordField fx:id="pass" focusColor="WHITE" labelFloat="true" onKeyReleased="#checkpasses"
+                                  prefHeight="50.0" prefWidth="385.0" promptText="Password"
+                                  style="-fx-background-color: white;"/>
+                <JFXPasswordField fx:id="confirm" focusColor="WHITE" labelFloat="true" onKeyReleased="#checkpasses"
+                                  prefHeight="50.0" prefWidth="385.0" promptText="Confirm Password"
+                                  style="-fx-background-color: white;"/>
+            </children>
+            <padding>
+                <Insets top="25.0"/>
+            </padding>
+        </VBox>
+        <Label contentDisplay="CENTER" layoutX="163.0" layoutY="72.0" prefHeight="63.0" prefWidth="395.0"
+               text="Welcome New User" textAlignment="CENTER" textFill="#fcf5f5">
+            <font>
+                <Font name="Monotype Corsiva" size="35.0"/>
+            </font>
+        </Label>
+        <JFXButton layoutX="224.0" layoutY="666.0" onAction="#signup" prefHeight="50.0" prefWidth="136.0"
+                   style="-fx-background-color: #00f5a7;" text="Signup">
+            <ripplerFill>
+                <LinearGradient endX="0.558252427184466" endY="1.0" startX="0.49514563106796117">
+                    <stops>
+                        <Stop color="#1776eb"/>
+                        <Stop color="WHITE" offset="1.0"/>
+                    </stops>
+                </LinearGradient>
+            </ripplerFill>
+        </JFXButton>
+        <Label fx:id="status" disable="true" layoutX="526.0" layoutY="422.0" prefHeight="21.0" prefWidth="50.0"
+               textFill="#f2f0f0"/>
+        <Label fx:id="status2" disable="true" layoutX="534.0" layoutY="585.0" prefHeight="21.0" prefWidth="50.0"/>
+        <HBox alignment="TOP_RIGHT" layoutX="462.0" layoutY="14.0" prefHeight="35.0" prefWidth="128.0" spacing="20.0">
+            <children>
+                <Circle fill="#d7eb00" onMouseClicked="#minimize" radius="9.0" stroke="BLACK" strokeType="INSIDE"/>
+                <Circle fill="#ee0000" onMouseClicked="#close" radius="9.0" stroke="BLACK" strokeType="INSIDE"/>
+            </children>
+        </HBox>
+        <Label layoutX="214.0" layoutY="740.0" onMouseClicked="#login" text="Already Registered? Login"
+               textFill="WHITE"/>
+    </children>
 </AnchorPane>

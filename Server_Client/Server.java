@@ -7,8 +7,9 @@ import java.util.Vector;
 
 public class Server {
 
-   private static Vector<clientHandler> ar= new Vector<>();
-    public static void main(String [] args) throws IOException {
+    private static Vector<clientHandler> ar = new Vector<>();
+
+    public static void main(String[] args) throws IOException {
         //Creates a Server on port 5005
         ServerSocket server = new ServerSocket(5005);
         int i = 0;
@@ -20,8 +21,8 @@ public class Server {
             System.out.println("Connection Successful");
             ObjectInputStream dios = new ObjectInputStream(clientConnection.getInputStream());
             ObjectOutputStream dos = new ObjectOutputStream(clientConnection.getOutputStream());
-            DataInputStream dataInput =new DataInputStream(clientConnection.getInputStream());
-            DataOutputStream dataOutput= new DataOutputStream(clientConnection.getOutputStream());
+            DataInputStream dataInput = new DataInputStream(clientConnection.getInputStream());
+            DataOutputStream dataOutput = new DataOutputStream(clientConnection.getOutputStream());
             //Assigns a client handler on a new Thread
             System.out.println("Assigning Thread");
             clientHandler client = new clientHandler(clientConnection, "Client" + i, dos, dios, dataOutput, dataInput);

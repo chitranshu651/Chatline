@@ -1,130 +1,152 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXListView?>
-<?import com.jfoenix.controls.JFXScrollPane?>
-<?import com.jfoenix.controls.JFXTextField?>
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.shape.Circle?>
-<?import javafx.scene.shape.Line?>
-<?import javafx.scene.text.Font?>
-
-<AnchorPane prefHeight="634.0" prefWidth="1050.0" style="-fx-background-color: #2A363F;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.Anchor">
-   <children>
-      <HBox alignment="TOP_RIGHT" layoutX="908.0" layoutY="14.0" prefHeight="35.0" prefWidth="128.0" spacing="20.0">
-         <children>
-            <Circle fill="#d7eb00" onMouseClicked="#minimize" radius="9.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fill="#ee0000" onMouseClicked="#close" radius="9.0" stroke="BLACK" strokeType="INSIDE" />
-         </children>
-      </HBox>
-      <AnchorPane layoutY="111.0" prefHeight="556.0" prefWidth="337.0" style="-fx-background-color: #4c6185;">
-         <children>
-            <JFXListView fx:id="friend" layoutX="14.0" layoutY="-7.0" prefHeight="556.0" prefWidth="337.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-         </children>
-      </AnchorPane>
-      <Pane fx:id="proflie" layoutX="337.0" layoutY="60.0" style="-fx-background-color: white;" visible="false">
-         <children>
-            <AnchorPane prefHeight="606.0" prefWidth="721.0" style="-fx-background-color: #FFFFFF;">
-               <children>
-                  <GridPane layoutX="89.0" layoutY="220.0" prefHeight="360.0" prefWidth="539.0">
-                    <columnConstraints>
-                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="299.0" minWidth="10.0" prefWidth="299.0" />
-                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="264.0" minWidth="10.0" prefWidth="240.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="50.0" valignment="CENTER" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <children>
-                        <Label text="First Name" GridPane.rowIndex="1" />
-                        <Label fx:id="first" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Label text="Last Name" GridPane.rowIndex="2" />
-                        <Label fx:id="last" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <Label text="Username" />
-                        <Label fx:id="user" text="Label" GridPane.columnIndex="1" />
-                        <Label alignment="CENTER" prefHeight="21.0" prefWidth="279.0" text="Email" textAlignment="CENTER" GridPane.rowIndex="3" />
-                        <Label fx:id="email" alignment="CENTER" prefHeight="21.0" prefWidth="279.0" text="Label" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                     </children>
-                  </GridPane>
-                  <Label fx:id="status" alignment="CENTER" layoutX="219.0" layoutY="188.0" prefHeight="21.0" prefWidth="279.0" text="Label" textAlignment="CENTER" />
-                  <Circle fx:id="avatar" fill="DODGERBLUE" layoutX="361.0" layoutY="93.0" radius="71.0" stroke="BLACK" strokeType="INSIDE" />
-                  <JFXButton layoutX="612.0" layoutY="14.0" onAction="#editprofile" prefHeight="42.0" prefWidth="89.0" ripplerFill="#626aff" text="Edit">
-                     <font>
-                        <Font name="System Bold" size="15.0" />
-                     </font>
-                  </JFXButton>
-               </children>
-            </AnchorPane>
-         </children>
-      </Pane>
-      <Pane fx:id="chat" layoutX="337.0" layoutY="53.0" prefHeight="616.0" prefWidth="721.0" style="-fx-background-color: white;">
-         <children>
-            <Label fx:id="chatname" layoutX="133.0" layoutY="34.0" prefHeight="39.0" prefWidth="263.0" text="Label">
-               <font>
-                  <Font size="27.0" />
-               </font>
-            </Label>
-            <Circle fx:id="chatavatar" fill="DODGERBLUE" layoutX="65.0" layoutY="68.0" radius="51.0" stroke="BLACK" strokeType="INSIDE" />
-            <Label fx:id="chatstatus" layoutX="133.0" layoutY="77.0" prefHeight="21.0" prefWidth="142.0" text="Label" />
-            <JFXButton fx:id="vbtn" layoutX="537.0" layoutY="34.0" onAction="#startVideo" prefHeight="36.0" prefWidth="67.0" text=" ">
-               <graphic>
-                  <FontAwesomeIconView glyphName="VIDEO_CAMERA" size="25" wrappingWidth="29.0" />
-               </graphic>
-            </JFXButton>
-            <JFXButton fx:id="abtn" layoutX="623.0" layoutY="30.0" onAction="#startAudio" prefHeight="42.0" prefWidth="67.0" text=" ">
-               <graphic>
-                  <FontAwesomeIconView glyphName="PHONE" size="25" wrappingWidth="29.0" />
-               </graphic>
-            </JFXButton>
-            <JFXTextField fx:id="usermessage" layoutY="544.0" prefHeight="72.0" prefWidth="598.0" promptText="Enter your message">
-               <font>
-                  <Font size="28.0" />
-               </font>
-            </JFXTextField>
-            <JFXButton buttonType="RAISED" layoutX="623.0" layoutY="552.0" onAction="#send" prefHeight="56.0" prefWidth="89.0" style="-fx-background-color: #1bf2b9;" text="Send" />
-            <Line endX="721.0" endY="136.0" startX="-2.0" startY="136.0" />
-            <JFXScrollPane layoutX="-6.0" layoutY="137.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="421.0" prefWidth="724.0" />
-            <Circle fx:id="green" fill="#24e487" layoutX="121.0" layoutY="22.0" radius="9.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fx:id="red" fill="#ff2d1f" layoutX="156.0" layoutY="22.0" radius="9.0" stroke="BLACK" strokeType="INSIDE" />
-         </children>
-      </Pane>
-      <AnchorPane layoutY="2.0" prefHeight="119.0" prefWidth="337.0" style="-fx-background-color: #1bf2b9;">
-         <children>
-            <Label layoutX="31.0" layoutY="85.0" prefHeight="21.0" prefWidth="89.0" text="Friends" textFill="#1b1a1a">
-               <font>
-                  <Font name="Monotype Corsiva" size="27.0" />
-               </font>
-            </Label>
-            <Label layoutX="185.0" layoutY="82.0" prefHeight="21.0" prefWidth="89.0" text="Groups" textAlignment="CENTER" textFill="#252525">
-               <font>
-                  <Font name="Monotype Corsiva" size="27.0" />
-               </font>
-            </Label>
-            <JFXButton layoutX="266.0" layoutY="14.0" onAction="#addFriend" prefHeight="21.0" prefWidth="42.0" text=" ">
-               <graphic>
-                  <FontAwesomeIconView glyphName="SEARCH_PLUS" size="25" />
-               </graphic>
-            </JFXButton>
-            <JFXButton layoutX="209.0" layoutY="14.0" onAction="#request" prefHeight="21.0" prefWidth="42.0" text=" ">
-               <graphic>
-                  <FontAwesomeIconView glyphName="USER_PLUS" size="25" />
-               </graphic>
-            </JFXButton>
-            <JFXButton layoutX="19.0" layoutY="20.0" onAction="#home" prefHeight="21.0" prefWidth="42.0" text=" ">
-               <graphic>
-                  <FontAwesomeIconView glyphName="HOME" size="25" />
-               </graphic>
-            </JFXButton>
-         </children>
-      </AnchorPane>
-   </children>
+<?import com.jfoenix.controls.*?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<AnchorPane prefHeight="634.0" prefWidth="1050.0" style="-fx-background-color: #2A363F;"
+            xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.Anchor">
+    <children>
+        <HBox alignment="TOP_RIGHT" layoutX="908.0" layoutY="14.0" prefHeight="35.0" prefWidth="128.0" spacing="20.0">
+            <children>
+                <Circle fill="#d7eb00" onMouseClicked="#minimize" radius="9.0" stroke="BLACK" strokeType="INSIDE"/>
+                <Circle fill="#ee0000" onMouseClicked="#close" radius="9.0" stroke="BLACK" strokeType="INSIDE"/>
+            </children>
+        </HBox>
+        <AnchorPane layoutY="111.0" prefHeight="556.0" prefWidth="337.0" style="-fx-background-color: #4c6185;">
+            <children>
+                <JFXListView fx:id="friend" layoutX="14.0" layoutY="-7.0" prefHeight="556.0" prefWidth="337.0"
+                             style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0"
+                             AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+            </children>
+        </AnchorPane>
+        <Pane fx:id="proflie" layoutX="337.0" layoutY="60.0" style="-fx-background-color: white;" visible="false">
+            <children>
+                <AnchorPane prefHeight="606.0" prefWidth="721.0" style="-fx-background-color: #FFFFFF;">
+                    <children>
+                        <GridPane layoutX="89.0" layoutY="220.0" prefHeight="360.0" prefWidth="539.0">
+                            <columnConstraints>
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="299.0"
+                                                   minWidth="10.0" prefWidth="299.0"/>
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="264.0"
+                                                   minWidth="10.0" prefWidth="240.0"/>
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="50.0"
+                                                vgrow="SOMETIMES"/>
+                                <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="50.0"
+                                                vgrow="SOMETIMES"/>
+                                <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="50.0"
+                                                valignment="CENTER" vgrow="SOMETIMES"/>
+                                <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="50.0"
+                                                vgrow="SOMETIMES"/>
+                            </rowConstraints>
+                            <children>
+                                <Label text="First Name" GridPane.rowIndex="1"/>
+                                <Label fx:id="first" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                                <Label text="Last Name" GridPane.rowIndex="2"/>
+                                <Label fx:id="last" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                                <Label text="Username"/>
+                                <Label fx:id="user" text="Label" GridPane.columnIndex="1"/>
+                                <Label alignment="CENTER" prefHeight="21.0" prefWidth="279.0" text="Email"
+                                       textAlignment="CENTER" GridPane.rowIndex="3"/>
+                                <Label fx:id="email" alignment="CENTER" prefHeight="21.0" prefWidth="279.0" text="Label"
+                                       textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                            </children>
+                        </GridPane>
+                        <Label fx:id="status" alignment="CENTER" layoutX="219.0" layoutY="188.0" prefHeight="21.0"
+                               prefWidth="279.0" text="Label" textAlignment="CENTER"/>
+                        <Circle fx:id="avatar" fill="DODGERBLUE" layoutX="361.0" layoutY="93.0" radius="71.0"
+                                stroke="BLACK" strokeType="INSIDE"/>
+                        <JFXButton layoutX="612.0" layoutY="14.0" onAction="#editprofile" prefHeight="42.0"
+                                   prefWidth="89.0" ripplerFill="#626aff" text="Edit">
+                            <font>
+                                <Font name="System Bold" size="15.0"/>
+                            </font>
+                        </JFXButton>
+                    </children>
+                </AnchorPane>
+            </children>
+        </Pane>
+        <Pane fx:id="chat" layoutX="337.0" layoutY="53.0" prefHeight="616.0" prefWidth="721.0"
+              style="-fx-background-color: white;">
+            <children>
+                <Label fx:id="chatname" layoutX="133.0" layoutY="34.0" prefHeight="39.0" prefWidth="263.0" text="Label">
+                    <font>
+                        <Font size="27.0"/>
+                    </font>
+                </Label>
+                <Circle fx:id="chatavatar" fill="DODGERBLUE" layoutX="65.0" layoutY="68.0" radius="51.0" stroke="BLACK"
+                        strokeType="INSIDE"/>
+                <Label fx:id="chatstatus" layoutX="133.0" layoutY="77.0" prefHeight="21.0" prefWidth="142.0"
+                       text="Label"/>
+                <JFXButton fx:id="vbtn" layoutX="537.0" layoutY="34.0" onAction="#startVideo" prefHeight="36.0"
+                           prefWidth="67.0" text=" ">
+                    <graphic>
+                        <FontAwesomeIconView glyphName="VIDEO_CAMERA" size="25" wrappingWidth="29.0"/>
+                    </graphic>
+                </JFXButton>
+                <JFXButton fx:id="abtn" layoutX="623.0" layoutY="30.0" onAction="#startAudio" prefHeight="42.0"
+                           prefWidth="67.0" text=" ">
+                    <graphic>
+                        <FontAwesomeIconView glyphName="PHONE" size="25" wrappingWidth="29.0"/>
+                    </graphic>
+                </JFXButton>
+                <JFXTextField fx:id="usermessage" layoutY="544.0" prefHeight="72.0" prefWidth="598.0"
+                              promptText="Enter your message">
+                    <font>
+                        <Font size="28.0"/>
+                    </font>
+                </JFXTextField>
+                <JFXButton buttonType="RAISED" layoutX="623.0" layoutY="552.0" onAction="#send" prefHeight="56.0"
+                           prefWidth="89.0" style="-fx-background-color: #1bf2b9;" text="Send"/>
+                <Line endX="721.0" endY="136.0" startX="-2.0" startY="136.0"/>
+                <Circle fx:id="green" fill="#24e487" layoutX="121.0" layoutY="22.0" radius="9.0" stroke="BLACK"
+                        strokeType="INSIDE"/>
+                <Circle fx:id="red" fill="#ff2d1f" layoutX="156.0" layoutY="22.0" radius="9.0" stroke="BLACK"
+                        strokeType="INSIDE"/>
+                <JFXListView fx:id="messageloader" layoutY="136.0" prefHeight="400.0" prefWidth="721.0"/>
+                <JFXButton layoutX="445.0" layoutY="38.0" onAction="#refresh" text=" ">
+                    <graphic>
+                        <FontAwesomeIconView glyphName="REFRESH" size="25"/>
+                    </graphic>
+                </JFXButton>
+            </children>
+        </Pane>
+        <AnchorPane layoutY="2.0" prefHeight="119.0" prefWidth="337.0" style="-fx-background-color: #1bf2b9;">
+            <children>
+                <Label layoutX="31.0" layoutY="85.0" prefHeight="21.0" prefWidth="89.0" text="Friends"
+                       textFill="#1b1a1a">
+                    <font>
+                        <Font name="Monotype Corsiva" size="27.0"/>
+                    </font>
+                </Label>
+                <Label layoutX="185.0" layoutY="82.0" prefHeight="21.0" prefWidth="89.0" text="Groups"
+                       textAlignment="CENTER" textFill="#252525">
+                    <font>
+                        <Font name="Monotype Corsiva" size="27.0"/>
+                    </font>
+                </Label>
+                <JFXButton layoutX="266.0" layoutY="14.0" onAction="#addFriend" prefHeight="21.0" prefWidth="42.0"
+                           text=" ">
+                    <graphic>
+                        <FontAwesomeIconView glyphName="SEARCH_PLUS" size="25"/>
+                    </graphic>
+                </JFXButton>
+                <JFXButton layoutX="209.0" layoutY="14.0" onAction="#request" prefHeight="21.0" prefWidth="42.0"
+                           text=" ">
+                    <graphic>
+                        <FontAwesomeIconView glyphName="USER_PLUS" size="25"/>
+                    </graphic>
+                </JFXButton>
+                <JFXButton layoutX="19.0" layoutY="20.0" onAction="#home" prefHeight="21.0" prefWidth="42.0" text=" ">
+                    <graphic>
+                        <FontAwesomeIconView glyphName="HOME" size="25"/>
+                    </graphic>
+                </JFXButton>
+            </children>
+        </AnchorPane>
+    </children>
 </AnchorPane>

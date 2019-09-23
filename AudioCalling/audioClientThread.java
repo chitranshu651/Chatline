@@ -6,11 +6,11 @@ public class audioClientThread extends Thread {
 
     private String ip;
 
-    public audioClientThread(String ip){
+    public audioClientThread(String ip) {
         this.ip = ip;
     }
 
-    public void run(){
+    public void run() {
         Receiver.RecieverStart(ip);
     }
 }

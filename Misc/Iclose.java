@@ -6,12 +6,12 @@ import javafx.stage.Stage;
 
 public interface Iclose {
 
-    default void close(MouseEvent click){
+    default void close(MouseEvent click) {
         Stage window = (Stage) ((Node) click.getSource()).getScene().getWindow();
         window.close();
     }
 
-    default void minimize(MouseEvent click){
+    default void minimize(MouseEvent click) {
         Stage window = (Stage) ((Node) click.getSource()).getScene().getWindow();
         window.hide();
     }

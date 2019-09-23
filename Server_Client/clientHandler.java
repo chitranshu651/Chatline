@@ -5,7 +5,6 @@ import Misc.ConnectionClass;
 import Misc.IPClass;
 import Misc.MyMessage;
 import Misc.PasswordUtils;
-import sample.Main;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -59,10 +58,15 @@ public class clientHandler implements Runnable {
                         dataOutput.writeBoolean(Login());
                         break;
                     case "Signup":
+                        System.out.println("signup");
                         dataOutput.writeBoolean(SignUp());
                         break;
                     case "Search":
                         ObjectOutput.writeObject(Search());
+                        break;
+                    case "CheckUser":
+                        System.out.println("c");
+                        dataOutput.writeBoolean(CheckUser());
                         break;
                     case "GetProfile":
                         ObjectOutput.writeObject(GetProfile());
@@ -88,7 +92,8 @@ public class clientHandler implements Runnable {
                         System.out.println("Get Message Called");
                         ObjectOutput.writeObject(GetMessages());
                         break;
-                    case "SendMessage": System.out.println("send Message called");
+                    case "SendMessage":
+                        System.out.println("send Message called");
                         dataOutput.writeBoolean(SendMessage());
                         break;
                     case "FriendSuggestion":
@@ -109,8 +114,8 @@ public class clientHandler implements Runnable {
                         break;
                     case "StartVideo":
                         System.out.println("Start video call");
-                         ObjectOutput.writeObject(StartVideo());
-                         break;
+                        ObjectOutput.writeObject(StartVideo());
+                        break;
                     case "CountRequests":
                         System.out.println("Count Requests called");
                         dataOutput.writeUTF(CountReq());
@@ -132,77 +137,95 @@ public class clientHandler implements Runnable {
         }
     }
 
-    private String CountReq() {
-        int m_count=0,v_count=0;
-        try{
-            String user=dataInput.readUTF();
-            String sql1="Select COUNT(UID) as count from notifications where receiver=\""+ user +"\" AND type=\"1\";";
-            Statement stmt=connection.createStatement();
-            ResultSet rs=stmt.executeQuery(sql1);
-            if(rs.next())
-            m_count=rs.getInt("count");
-            String sql2="select COUNT(UID) as count from notifications where receiver=\""+ user +"\" AND type=\"0\";";
-            stmt=connection.createStatement();
-            ResultSet rs1=stmt.executeQuery(sql1);
-            if(rs1.next())
-            v_count=rs1.getInt("count");
-            String ret="You have "+m_count+" new messages and "+v_count+" missed video calls.";
+    private boolean CheckUser() {
+        try {
+            System.out.println("value");
+            String user = dataInput.readUTF();
+            String sql = "SELECT COUNT(Username) as count FROM user WHERE Username =  '" + user + "' ;";
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(sql);
+            while (rs.next()) {
+                System.out.println("love");
+                return rs.getInt(1) == 0;
 
+            }
+        } catch (SQLException | IOException e) {
+            System.out.println(e);
+        }
+        return false;
+    }
+
+    private String CountReq() {
+        int m_count = 0, v_count = 0;
+        try {
+            String user = dataInput.readUTF();
+            String sql1 = "Select COUNT(UID) as count from notifications where receiver=\"" + user + "\" AND type=\"1\";";
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(sql1);
+            if (rs.next())
+                m_count = rs.getInt("count");
+            String sql2 = "select COUNT(UID) as count from notifications where receiver=\"" + user + "\" AND type=\"0\";";
+            stmt = connection.createStatement();
+            ResultSet rs1 = stmt.executeQuery(sql2);
+            if (rs1.next())
+                v_count = rs1.getInt("count");
+            String ret = "You have " + m_count + " new messages and " + v_count + " missed video calls.";
+            String sql3 = "delete from notifications where receiver=\"" + user + "\";";
+            stmt = connection.createStatement();
+            stmt.execute(sql3);
             return ret;
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return "";
     }
 
     private IPClass StartVideo() {
-        try{
+        try {
             String user = dataInput.readUTF();
             String sql = "Select * from online_status where Username =\"" + user + "\";";
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(sql);
-            IPClass ipClass=null;
-            if (rs.next()){
-                ipClass =new IPClass();
+            IPClass ipClass = null;
+            if (rs.next()) {
+                ipClass = new IPClass();
                 ipClass.setIp(rs.getString("IP"));
                 ipClass.setPort(rs.getString("Port"));
                 ipClass.setUsername(rs.getString("Username"));
             }
             return ipClass;
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
 
     private boolean CheckFriend() {
-        try{
-            boolean check =false;
-            String user1=dataInput.readUTF();
-            String user2=dataInput.readUTF();
-            String sql = "Select * from friend where user1=\""+ user1 +"\" and user2=\""+ user2 + "\";";
-            Statement statement =connection.createStatement();
+        try {
+            boolean check = false;
+            String user1 = dataInput.readUTF();
+            String user2 = dataInput.readUTF();
+            String sql = "Select * from friend where user1=\"" + user1 + "\" and user2=\"" + user2 + "\";";
+            Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
-            while (resultSet.next()){
-                check=true;
+            while (resultSet.next()) {
+                check = true;
             }
             return check;
-        }
-        catch (SQLException | IOException e){
+        } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
         return false;
     }
 
     private boolean Disconnect() {
-        try{
-            String user=dataInput.readUTF();
-            String sql="DELETE from Online_Status where username=\"" + user + "\";";
-            Statement stmt=connection.createStatement();
+        try {
+            String user = dataInput.readUTF();
+            String sql = "DELETE from Online_Status where username=\"" + user + "\";";
+            Statement stmt = connection.createStatement();
             stmt.execute(sql);
             return true;
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
@@ -210,35 +233,33 @@ public class clientHandler implements Runnable {
 
     private boolean CheckOnline() {
         try {
-            boolean flag=false;
-            String user=dataInput.readUTF();
-            String sql="Select Username from Online_Status where Username=\""+user+"\";";
-            Statement stmt=connection.createStatement();
-            ResultSet rs=stmt.executeQuery(sql);
-            while(rs.next())
-            {
-                flag=true;
+            boolean flag = false;
+            String user = dataInput.readUTF();
+            String sql = "Select Username from Online_Status where Username=\"" + user + "\";";
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                flag = true;
             }
-            if(flag==true)
+            if (flag == true)
                 return true;
             else
                 return false;
-        }catch(Exception e){
+        } catch (Exception e) {
             e.getStackTrace();
         }
         return false;
     }
 
     private ArrayList<User> GetSuggestions() {
-        ArrayList<User> suggestions=new ArrayList<>();
+        ArrayList<User> suggestions = new ArrayList<>();
         User user1;
         try {
-            String user=dataInput.readUTF();
-            String sql="SELECT * from user where Username in (SELECT DISTINCT user2 from friend where user1 in (SELECT user2 from friend where user1=\""+user+"\") AND user2 != \""+user+"\");";
-            Statement stmt=connection.createStatement();
+            String user = dataInput.readUTF();
+            String sql = "SELECT * from user where Username in (SELECT DISTINCT user2 from friend where user1 in (SELECT user2 from friend where user1=\"" + user + "\") AND user2 != \"" + user + "\");";
+            Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
-            while(rs.next())
-            {
+            while (rs.next()) {
                 String avatar = rs.getString("Avatar");
                 String first = rs.getString("First");
                 String last = rs.getString("Last");
@@ -251,7 +272,7 @@ public class clientHandler implements Runnable {
                 user1.setImage(BufftoByte(f));
                 suggestions.add(user1);
             }
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return suggestions;
@@ -265,7 +286,7 @@ public class clientHandler implements Runnable {
         User user1;
         try {
             String user = dataInput.readUTF();
-            String sql = "Select user.* from user join request on user.Username=request.firstuser where request.seconduser=\"" + user +"\";";
+            String sql = "Select user.* from user join request on user.Username=request.firstuser where request.seconduser=\"" + user + "\";";
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(sql);
             while (rs.next()) {
@@ -278,7 +299,7 @@ public class clientHandler implements Runnable {
                 System.out.println(username);
                 user1 = new User(avatar, first, last, email, username, "", "", status);
                 File p = new File(avatar);
-                user1.setPic(p);
+                user1.setImage(BufftoByte(p));
                 friends.add(user1);
             }
         } catch (IOException e) {
@@ -300,14 +321,14 @@ public class clientHandler implements Runnable {
             String email = dataInput.readUTF();
             String status = dataInput.readUTF();
             Boolean change = ObjectInput.readBoolean();
-            byte [] f = (byte []) ObjectInput.readObject();
+            byte[] f = (byte[]) ObjectInput.readObject();
             System.out.println(f);
             System.out.println(LocalDateTime.now().toString());
             String filename = username + ".jpg";
             String path = "src/Server_Client/Server_Files/" + filename;
             File output;
-            if(change) {
-                 output = new File(path);
+            if (change) {
+                output = new File(path);
                 if (output.createNewFile()) {
                     System.out.println("File Created");
                     BufferedImage img = BytetoBuff(f);
@@ -318,12 +339,11 @@ public class clientHandler implements Runnable {
                     BufferedImage img = BytetoBuff(f);
                     ImageIO.write(img, "jpg", output);
                 }
-            }
-            else{
+            } else {
                 output = new File(path);
             }
             System.out.println(output);
-            String sql = "Update user set First=\"" + first + "\", Last=\"" + last + "\",Email=\"" + email + "\", Avatar=\"" + path + "\", Status=\""+ status + "\" where username=\"" + username + "\";";
+            String sql = "Update user set First=\"" + first + "\", Last=\"" + last + "\",Email=\"" + email + "\", Avatar=\"" + path + "\", Status=\"" + status + "\" where username=\"" + username + "\";";
             Statement statement = connection.createStatement();
             boolean b = statement.execute(sql);
             return true;
@@ -357,7 +377,7 @@ public class clientHandler implements Runnable {
             String user2 = dataInput.readUTF();
             String sql = "INSERT into request VALUES(NULL,\"" + user1 + "\",\"" + user2 + "\");";
             Statement statement = connection.createStatement();
-            boolean check= statement.execute(sql);
+            boolean check = statement.execute(sql);
             return true;
         } catch (IOException | SQLException e) {
             e.printStackTrace();
@@ -431,8 +451,8 @@ public class clientHandler implements Runnable {
         ArrayList<User> names = new ArrayList<User>();
         try {
             String user = dataInput.readUTF();
-            String current= dataInput.readUTF();
-            String sql = "SELECT `Avatar`,`First`,`Last`,`Username`,`Email`,`Status` FROM `user` WHERE `Username` LIKE \'" + user + "%\' and Username!= \""+ current+"\";";
+            String current = dataInput.readUTF();
+            String sql = "SELECT `Avatar`,`First`,`Last`,`Username`,`Email`,`Status` FROM `user` WHERE `Username` LIKE \'" + user + "%\' and Username!= \"" + current + "\";";
 
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(sql);
@@ -471,10 +491,9 @@ public class clientHandler implements Runnable {
                 Salt = rs.getString("Salt");
             }
             System.out.println("Login Done");
-            if(check.verifyUserPassword(password, Spassword, Salt))
-            {
-                String sql1="Insert into Online_Status VALUES(\""+username+"\",\""+ client.getInetAddress().getHostAddress()+"\",\""+ port+"\");";
-                statement=connection.createStatement();
+            if (check.verifyUserPassword(password, Spassword, Salt)) {
+                String sql1 = "Insert into Online_Status VALUES(\"" + username + "\",\"" + client.getInetAddress().getHostAddress() + "\",\"" + port + "\");";
+                statement = connection.createStatement();
                 statement.execute(sql1);
                 return true;
             }
@@ -499,15 +518,15 @@ public class clientHandler implements Runnable {
         return false;
     }
 
-    private ArrayList<MyMessage> GetMessages(){
+    private ArrayList<MyMessage> GetMessages() {
         ArrayList<MyMessage> messages = new ArrayList<>();
-        try{
+        try {
             String user1 = dataInput.readUTF();
             String user2 = dataInput.readUTF();
-            String sql = "SELECT * from messages where sender or receiver=\"" + user1 + "\" and sender or reciever =\""+ user2 + "\";";
+            String sql = "select * from messages where reciever=\"" + user1 + "\" and  sender=\"" + user2 + "\" or reciever=\"" + user2 + "\" and sender=\"" + user1 + "\" order by time limit 100;";
             Statement stmt = connection.createStatement();
-            ResultSet rs= stmt.executeQuery(sql);
-            while(rs.next()){
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
                 MyMessage message = new MyMessage();
                 message.setMessage(rs.getString("message"));
                 message.setReciever(rs.getString("reciever"));
@@ -515,49 +534,47 @@ public class clientHandler implements Runnable {
                 message.setTime(rs.getTimestamp("time"));
                 messages.add(message);
             }
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return messages;
     }
 
 
-    private boolean SendMessage(){
-        try{
-            boolean flag=false;
+    private boolean SendMessage() {
+        try {
+            boolean flag = false;
             MyMessage message = (MyMessage) ObjectInput.readObject();
-            String sql1 = "Insert into messages values(NULL,\""+ message.getSender()+ "\", \""+ message.getReciever() +"\" , \"" + message.getMessage() + "\", \"" + message.getTime()+ "\");";
+            String sql1 = "Insert into messages values(NULL,\"" + message.getSender() + "\", \"" + message.getReciever() + "\" , \"" + message.getMessage() + "\", \"" + message.getTime() + "\");";
             Statement stmt = connection.createStatement();
             stmt.execute(sql1);
-            String receiver_m=message.getReciever();
-            String sql2 = "Select * from Online_Status where Username=\'"+receiver_m+"\';";
-            stmt=connection.createStatement();
-            ResultSet rs=stmt.executeQuery(sql2);
-            while(rs.next()) {
+            String receiver_m = message.getReciever();
+            String sql2 = "Select * from Online_Status where Username=\'" + receiver_m + "\';";
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(sql2);
+            while (rs.next()) {
                 flag = true;
-            //    receiver_t = rs.getString("status");
+                //    receiver_t = rs.getString("status");
             }
-            if(flag==false) {
-                String sql3 = "Insert into Notifications VALUES(\"" + receiver_m + "\",\"" + message.getSender() + "\",\"1\");";
+            if (flag == false) {
+                String sql3 = "Insert into Notifications VALUES(NULL, \"" + receiver_m + "\",\"" + message.getSender() + "\",\"1\");";
                 stmt = connection.createStatement();
                 stmt.execute(sql3);
             }
             return true;
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
     }
 
-    private byte[] BufftoByte(File f){
+    private byte[] BufftoByte(File f) {
         try {
             BufferedImage img = ImageIO.read(f);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(img,"jpg",baos);
+            ImageIO.write(img, "jpg", baos);
             baos.flush();
-            byte [] image =baos.toByteArray();
+            byte[] image = baos.toByteArray();
             baos.close();
             return image;
         } catch (IOException e) {

@@ -2,7 +2,6 @@ package Login_Signup;
 
 import javafx.scene.image.Image;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.Serializable;
 
@@ -17,7 +16,7 @@ public class User implements Serializable {
     private String avatar;
     private Image img;
     private File pic;
-    private byte [] image;
+    private byte[] image;
 
     public byte[] getImage() {
         return image;

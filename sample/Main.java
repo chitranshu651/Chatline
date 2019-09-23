@@ -1,5 +1,6 @@
 package sample;
 
+import AudioCalling.SockMicServer.src.av.Server;
 import Misc.SessionInfo;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -10,9 +11,10 @@ import javafx.stage.StageStyle;
 
 public class Main extends Application {
 
-    public static Server_Client.Client user= new Server_Client.Client("127.0.0.1", 5005);
+    public static Server_Client.Client user = new Server_Client.Client("localhost", 5005);
+
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("../Login_Signup/Login.fxml"));
         primaryStage.setTitle("Welcome to ChatLine");
         primaryStage.initStyle(StageStyle.UNDECORATED);
@@ -21,12 +23,13 @@ public class Main extends Application {
     }
 
     @Override
-    public void stop() throws Exception{
+    public void stop() throws Exception {
         Main.user.sendString("Disconnect");
         Main.user.sendString(SessionInfo.getUsername());
-        SessionInfo.getVideocalling().threadRun=false;
-
+        SessionInfo.getVideocalling().threadRun = false;
+        Server._running = false;
     }
+
     public static void main(String[] args) {
         launch(args);
     }

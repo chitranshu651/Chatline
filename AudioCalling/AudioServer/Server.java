@@ -1,19 +1,19 @@
-package AudioCalling.SockMicServer.src.av;
+package AudioCalling.AudioServer;
+
+import Misc.SessionInfo;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
-/**
- * Created by VarunKr on 22-04-2015.
- */
+
 public class Server {
 
     public static final int ERROR_LIMIT = 10;
-    public static final int PORT = 22223;
+    public static final int PORT = SessionInfo.getAudioPort();
     public ArrayList<Client> Clients;
-    private boolean _running = false;
+    public static boolean _running = false;
     private ServerSocket _serverSocket;
     private Thread _thread;
 
@@ -24,7 +24,7 @@ public class Server {
                 System.out.println("Waiting for client...");
                 try {
                     Socket sock = _serverSocket.accept();
-                    System.out.println("\tav.Client accepted > " + sock.getLocalPort());
+                    System.out.println("\tClient accepted: " + sock.getLocalPort());
 
                     Client cl = new Client(sock);
                     Clients.add(cl);
@@ -53,7 +53,8 @@ public class Server {
             try {
                 _running = false;
                 _thread.interrupt();
-            } catch (Exception ex) {}
+            } catch (Exception ex) {
+            }
             _thread = null;
         }
     }

@@ -1,4 +1,4 @@
-package AudioCalling.SockMicClient.src.av;
+package AudioCalling.AudioClient;
 
 import javax.sound.sampled.*;
 import java.io.IOException;
@@ -18,12 +18,12 @@ public class Client2 {
     String _serverName = "127.0.0.1";
     boolean _running = true;
 
-    public Client2(String serverName) throws IOException,LineUnavailableException {
+    public Client2(String serverName) throws IOException, LineUnavailableException {
         this._serverName = serverName;
         init();
     }
 
-    private void init() throws LineUnavailableException{
+    private void init() throws LineUnavailableException {
         //  specifying the audio format
         AudioFormat _format = new AudioFormat(8000.F,// Sample Rate
                 16,     // Size of SampleBits
@@ -62,9 +62,9 @@ public class Client2 {
                     continue;   //  data not available so continue back to start of loop
 
                 //  count of the data bytes read
-                int readCount= _streamIn.read(data, 0, data.length);
+                int readCount = _streamIn.read(data, 0, data.length);
 
-                if(readCount>0){
+                if (readCount > 0) {
                     _speaker.write(data, 0, readCount);
                 }
             }
